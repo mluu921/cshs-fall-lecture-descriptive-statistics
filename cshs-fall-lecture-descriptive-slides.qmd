@@ -37,7 +37,7 @@ library(gtExtras)
 
 # [Why do we need to visualize our data?]{.r-fit-text}
 
-## Data {}
+## Data
 
 ```{r}
 data <- datasauRus::datasaurus_dozen
@@ -52,8 +52,7 @@ plot_data <- data |>
 
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ```{r}
 #| results: asis
 #| 
@@ -79,27 +78,25 @@ iwalk(plot_data, ~ {
   
 })
 ```
-
 :::
 
-::: {.notes}
-* What I'm showing here are 4 unique datasets - dataset A, B, C, and D.
+::: notes
+-   What I'm showing here are 4 unique datasets - dataset A, B, C, and D.
 
-* Of note, these are truncated versions of the full dataset, where i'm only showing the first 10 rows due to space.
+-   Of note, these are truncated versions of the full dataset, where i'm only showing the first 10 rows due to space.
 
-* Each dataset has 3 variables, the dataset variable, X, and Y
+-   Each dataset has 3 variables, the dataset variable, X, and Y
 
-* X, and Y are both continuous variables as seen on this slide
-
+-   X, and Y are both continuous variables as seen on this slide
 :::
 
 # [Let's begin by taking descriptive measures]{.r-fit-text}
 
-::: {.notes}
-* So, let's begin by taking some descriptive summary measures of the four datasets as discussed by my colleauge Marie
+::: notes
+-   So, let's begin by taking some descriptive summary measures of the four datasets as discussed by my colleauge Marie
 :::
 
-## {.center}
+##  {.center}
 
 ```{r}
 
@@ -122,27 +119,117 @@ plot_data |>
 
 ```
 
+<br>
+
 ::: {.fragment .r-fit-text}
 It appears the counts (n), mean (x), mean (y), and sd (x) and sd (y) are identical for ALL four datasets!
 :::
 
-::: {.notes}
+::: notes
+-   What you're seeing here is a small table with some basic summary measures like counts (n), mean, and standard deviation. We have summary measures for each of the four datasets as seen on each rows.
 
-* What you're seeing here is a small table with some basic summary measures like counts (n), mean, and standard deviation. We have summary measures for each of the four datasets as seen on each rows.
+-   For example, the first row is showing the descriptive measures for dataset A, followed by B, C, and D.
 
-* For example, the first row is showing the descriptive measures for dataset A, followed by B, C, and D.
+-   For dataset A, we have 142 rows, with a mean of 54.3 for X, 47.8 for Y, with the SD of X as 16.8 and the SD of Y as 26.9
 
-* For dataset A, we have 142 rows, with a mean of 54.3 for X, 47.8 for Y, with the SD of X as 16.8 and the SD of Y as 26.9
+-   You may have already noticed the obvious...
 
-* You may have already noticed the obvious...
+-   The summary measures are identical for all four datasets!
+:::
 
-* The summary measures are identical for all four datasets!
+# Can we conclude the datasets are similiar or identical?
 
+::: notes
+-   So what can we conclude about the four datasets ?
+:::
+
+# Not quite yet!
+
+# Let's visualize the relationship of x and y
+
+## 
+
+```{r}
+
+plots <- map(plot_data, ~ {
+  plot <- ggplot(.x, aes(x = x, y = y)) +
+    geom_point(size = 5) +
+    coord_equal(xlim = c(0, 100), ylim = c(0, 100)) +
+    theme_bw(base_size = 20)
+  
+  plot
+})
+
+```
+
+::: panel-tabset
+### A
+
+```{r}
+#| fig-align: center
+#| fig-height: 10
+plots$A
+```
+
+### B
+
+```{r}
+#| fig-align: center
+#| fig-height: 10
+plots$B
+```
+
+### C
+
+```{r}
+#| fig-align: center
+#| fig-height: 10
+plots$C
+```
+
+### D
+
+```{r}
+#| fig-align: center
+#| fig-height: 10
+plots$D
+```
+:::
+
+::: notes
+-   What you are seeing is a scatter plot of X and Y for dataset A. In short, a scatter plot allows us to visualize the relationship between two continuous variables. We have X on the x-axis, and Y on the y-axis. Each point represents a single observation with the corresponding X and Y values. When visualized we have this plot of a dino.
 :::
 
 
+## 
 
+![](images/blow-mind-mind-blown.gif){fig-align="center" width="1400"}
 
+::: notes
+-   You might be thinking, what is going on!? I just showed you four different datasets with identical or near identical summary measures, yet we have these unique and interesting figures...
+:::
 
+## 
 
+![](images/DinoSequentialSmaller.gif){fig-align="center" width="2000"}
+
+::: notes
+-   This phenomenom expands to more than just the 4 example datasets that I showed, but we have 13 datasets as seen on this slide that have near identical summary measures when visualized.
+
+-   So what is the take away from this rather unique and exaggerated example
+:::
+
+# Although simple quantitative summaries are similar ...
+
+# They can appear drastically different when visualized!
+
+## Datasaurus Dozen
+
+* The original "Datasaurus" or "dino" was created by **Alberto Cairo** in the following [blog post](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)
+
+* He was then later made famous by the paper published by **Justin Matejka** and **George Fitzmaurize**, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs), where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
+
+::: {.notes}
+* Now a little background on the dataset that I showed - The dataset is called the datasaurus dozen
+:::
 
