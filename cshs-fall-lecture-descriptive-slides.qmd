@@ -1,0 +1,148 @@
+---
+format: 
+  revealjs:
+    height: 1080
+    width: 1920
+    slide-number: true
+    transition: fade
+    footer: Biostatistics & Bioinformatics Research Center
+self-contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# [Graphical Descriptive Statistics]{.r-fit-text}
+
+```{r}
+library(tidyverse)
+library(datasauRus)
+library(patchwork)
+library(gt)
+library(datasauRus)
+library(gtExtras)
+
+```
+
+::: {style="text-align:center"}
+| Michael Luu, MPH
+| Biostatistics & Bioinformatics Research Center \| Cedars Sinai Medical Center
+| `r format(Sys.Date(), '%B %d, %Y')`
+:::
+
+::: notes
+-   Hi Everyone - My name is Michael Luu, and I'm a Research Biostatistician here at the Biostatistics Core as part of Cedar Sinai Cancer Center. Today I will be talking about graphical descriptive statistics. The objective of my talk is to provide a motivating example on the need to visualize our data, as well as provide some of the basic tools and types of simple figures you can use to accomplish this goal.
+
+-   So to start off my talk, I want to provide a motivating example -
+:::
+
+# [Why do we need to visualize our data?]{.r-fit-text}
+
+## Data {}
+
+```{r}
+data <- datasauRus::datasaurus_dozen
+
+plot_data <- data |> 
+  filter(dataset %in% c('dino', 'star', 'x_shape', 'circle')) |> 
+  mutate(dataset = factor(
+    dataset,
+    levels = c('dino', 'star', 'x_shape', 'circle'),
+    labels = LETTERS[1:4]
+  ))
+
+```
+
+::: {.panel-tabset}
+
+```{r}
+#| results: asis
+#| 
+
+plot_data <- plot_data %>%
+  group_nest(dataset) %>%
+  deframe()
+
+iwalk(plot_data, ~ {
+  
+  cat('### ', .y, '\n\n')
+  
+  .x |> 
+    head(n=10) |> 
+    gt() |> 
+    gt_theme_538() |> 
+    tab_options(
+      table.font.size = px(50)
+    ) |> 
+    print()
+  
+  cat('\n\n')
+  
+})
+```
+
+:::
+
+::: {.notes}
+* What I'm showing here are 4 unique datasets - dataset A, B, C, and D.
+
+* Of note, these are truncated versions of the full dataset, where i'm only showing the first 10 rows due to space.
+
+* Each dataset has 3 variables, the dataset variable, X, and Y
+
+* X, and Y are both continuous variables as seen on this slide
+
+:::
+
+# [Let's begin by taking descriptive measures]{.r-fit-text}
+
+::: {.notes}
+* So, let's begin by taking some descriptive summary measures of the four datasets as discussed by my colleauge Marie
+:::
+
+## {.center}
+
+```{r}
+
+plot_data |>
+  enframe() |>
+  mutate(
+    n = map_int(value, ~ nrow(.x)),
+    mean_x = map_dbl(value, ~ mean(.x$x)),
+    sd_x = map_dbl(value, ~ sd(.x$x)),
+    mean_y = map_dbl(value, ~ mean(.x$y)),
+    sd_y = map_dbl(value, ~ sd(.x$y))
+  ) |>
+  mutate(across(c(mean_x, sd_x, mean_y, sd_y), ~ scales::label_number(.02)(.x))) |>
+  select(-value) |>
+  rename('dataset' = name) |>
+  gt() %>%
+  gtExtras::gt_theme_538() |>
+  tab_options(table.font.size = px(75))
+
+
+```
+
+::: {.fragment .r-fit-text}
+It appears the counts (n), mean (x), mean (y), and sd (x) and sd (y) are identical for ALL four datasets!
+:::
+
+::: {.notes}
+
+* What you're seeing here is a small table with some basic summary measures like counts (n), mean, and standard deviation. We have summary measures for each of the four datasets as seen on each rows.
+
+* For example, the first row is showing the descriptive measures for dataset A, followed by B, C, and D.
+
+* For dataset A, we have 142 rows, with a mean of 54.3 for X, 47.8 for Y, with the SD of X as 16.8 and the SD of Y as 26.9
+
+* You may have already noticed the obvious...
+
+* The summary measures are identical for all four datasets!
+
+:::
+
+
+
+
+
+
+
