@@ -965,6 +965,18 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
   - Violin plot
 :::
 
+
+:::
+
+::: {.column width='50%'}
+
+* Two continuous variable
+  - Scatter plot
+
+* One continuous by categorical variable
+  - Dot plot
+  - Box plot
+  - Violin plot
 :::
 
 ::::
