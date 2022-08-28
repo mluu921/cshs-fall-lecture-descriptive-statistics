@@ -228,7 +228,7 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 :::
 
 ## Datasaurus Dozen
-```{r, out.width='100%', fig.height=8, fig.width=12, fig.align='center'}
+```{r, out.width='80%', fig.height=8, fig.width=12, fig.align='center'}
 data <- datasauRus::datasaurus_dozen
 
 ggplot(data, aes(x = x, y = y)) + 
