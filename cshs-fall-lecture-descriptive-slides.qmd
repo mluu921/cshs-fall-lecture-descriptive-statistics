@@ -4,7 +4,10 @@ format:
     slide-number: true
     transition: fade
     footer: Biostatistics & Bioinformatics Research Center
-self-contained: true
+    menu: true
+    overview: true
+    chalkboard: true
+self-contained: false
 editor_options: 
   chunk_output_type: console
 ---
@@ -406,7 +409,7 @@ local({
 
 * Intuitive and easy to understand
 
-```{r, fig.height=3, fig.width=10, fig.align='center'}
+```{r, fig.height=4, fig.width=10, fig.align='center', out.width='60%'}
 
 local({
   set.seed(5)
@@ -504,7 +507,8 @@ local({
     geom_vline(aes(xintercept = mean(x)), color = 'red', size = 1) +
     geom_vline(aes(xintercept = median(x)), color = 'green', size = 1, linetype = 'dashed') +
     geom_vline(aes(xintercept = 25), color = 'blue', size = 1, linetype = 'dotted') +
-    geom_density(aes(y = 1 * ..count..))
+    geom_density(aes(y = 1 * ..count..)) + 
+    theme_light(base_size = 15)
 })
 
 
@@ -565,37 +569,26 @@ knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 
 :::
 
-## Scatter plot
-
-:::: {.columns}
-
-::: {.column width='60%'}
+## Scatter plot {.smaller}
 
 * Used to visualize the relationship between two continuous variables
 
 * Useful for detecting patterns that are obscured from quantitative summaries like what we observed in Anscombe's quartet and the Datasaurus dozen.
 
-:::
+```{r, fig.height=4, fig.width=6, out.width='60%', fig.align='center'}
 
-::: {.column width='40%'}
-
-```{r, fig.height=6, fig.width=4}
-
-set.seed(1)
-data <- tibble(
-  x = rnorm(25, 25, sd = 5),
-  y = rnorm(25, 45, sd = 2)
-)
-
-ggplot(data, aes(x = x, y = y)) +
-  geom_point() +
-  theme_minimal(base_size = 15)
+local({
+  set.seed(1)
+  data <- tibble(x = rnorm(25, 25, sd = 5),
+                 y = rnorm(25, 45, sd = 2))
+  
+  ggplot(data, aes(x = x, y = y)) +
+    geom_point() +
+    theme_minimal(base_size = 15)
+})
 
 ```
 
-:::
-
-::::
 
 ::: notes
 
@@ -710,10 +703,6 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 ## How NOT to Bar Plot {.smaller}
 
-:::: {.columns}
-
-::: {.column width='60%'}
-
 * Although frequently found and prevalent in the literature, this is NOT to be used to describe mean and dispersion (continuous data)
 
 * Only shows one arm of the error bar, making overlap comparisons difficult
@@ -722,11 +711,7 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 * Obscures the distribution and spread of the data
 
-:::
-
-::: {.column width='40%'}
-
-```{r, fig.height=4, fig.width=6}
+```{r, fig.height=4, fig.width=8, fig.align='center', out.width='80%'}
 
 local({
 
@@ -762,10 +747,6 @@ local({
 
 ```
 
-
-:::
-
-::::
 
 ## Box plot {.smaller}
 
@@ -845,9 +826,6 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 
 ## Violin plot {.smaller}
 
-:::: {.columns}
-
-::: {.column width='60%'}
 * Violin plots are box plots, with an overlay of the density distribution (histogram) of the data
 
 * More informative than a simple box plot
@@ -856,10 +834,8 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 
 * Especially useful for bimodal or multimodal distribution
   * e.g. distribution of data with multiple peaks
-:::
 
-::: {.column width='40%'}
-```{r, fig.height=6, fig.width=4}
+```{r, fig.height=4, fig.width=8, out.width='70%', fig.align='center'}
 
 set.seed(1)
 data <- tibble(
@@ -878,9 +854,6 @@ ggplot(data, aes(x = group, y = y)) +
   labs(x = NULL) +
   coord_cartesian(expand = T)
 ```
-:::
-
-::::
 
 ## How are violin plots made?
 
@@ -954,7 +927,7 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 
 <!-- --- -->
 
-# Summary {.smaller}
+## Summary
 
 :::: {.columns}
 
@@ -969,6 +942,12 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 * One categorical variable
   - Bar plot
 
+
+
+:::
+
+::: {.column width='40%'}
+
 * Two continuous variable
   - Scatter plot
 
@@ -976,15 +955,6 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
   - Dot plot
   - Box plot
   - Violin plot
-
-:::
-
-::: {.column width='40%'}
-
-```{r, out.width = '100%'}
-knitr::include_graphics('images/scientific_paper_graph_quality.png')
-```
-
 :::
 
 ::::
