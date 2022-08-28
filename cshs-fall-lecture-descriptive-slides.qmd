@@ -1,8 +1,6 @@
 ---
 format: 
   revealjs:
-    height: 1080
-    width: 1920
     slide-number: true
     transition: fade
     footer: Biostatistics & Bioinformatics Research Center
@@ -25,7 +23,8 @@ library(gtExtras)
 
 ::: {style="text-align:center"}
 | Michael Luu, MPH
-| Biostatistics & Bioinformatics Research Center \| Cedars Sinai Medical Center
+| Biostatistics & Bioinformatics Research Center 
+| Cedars Sinai Medical Center
 | `r format(Sys.Date(), '%B %d, %Y')`
 :::
 
@@ -70,8 +69,8 @@ iwalk(plot_data, ~ {
     gt() |> 
     gt_theme_538() |> 
     tab_options(
-      table.font.size = px(50)
-    ) |> 
+      table.font.size = px(30)
+    ) |>
     print()
   
   cat('\n\n')
@@ -114,7 +113,7 @@ plot_data |>
   rename('dataset' = name) |>
   gt() %>%
   gtExtras::gt_theme_538() |>
-  tab_options(table.font.size = px(75))
+  tab_options(table.font.size = px(40))
 
 
 ```
@@ -153,7 +152,7 @@ It appears the counts (n), mean (x), mean (y), and sd (x) and sd (y) are identic
 
 plots <- map(plot_data, ~ {
   plot <- ggplot(.x, aes(x = x, y = y)) +
-    geom_point(size = 5) +
+    geom_point(size = 2) +
     coord_equal(xlim = c(0, 100), ylim = c(0, 100)) +
     theme_bw(base_size = 20)
   
@@ -167,7 +166,6 @@ plots <- map(plot_data, ~ {
 
 ```{r}
 #| fig-align: center
-#| fig-height: 10
 plots$A
 ```
 
@@ -175,7 +173,6 @@ plots$A
 
 ```{r}
 #| fig-align: center
-#| fig-height: 10
 plots$B
 ```
 
@@ -183,7 +180,6 @@ plots$B
 
 ```{r}
 #| fig-align: center
-#| fig-height: 10
 plots$C
 ```
 
@@ -191,7 +187,6 @@ plots$C
 
 ```{r}
 #| fig-align: center
-#| fig-height: 10
 plots$D
 ```
 :::
@@ -203,7 +198,9 @@ plots$D
 
 ## 
 
-![](images/blow-mind-mind-blown.gif){fig-align="center" width="1400"}
+::: {style='fig-align: center'}
+![](images/blow-mind-mind-blown.gif){.r-stretch}
+:::
 
 ::: notes
 -   You might be thinking, what is going on!? I just showed you four different datasets with identical or near identical summary measures, yet we have these unique and interesting figures...
@@ -211,7 +208,7 @@ plots$D
 
 ## 
 
-![](images/DinoSequentialSmaller.gif){fig-align="center" width="2000"}
+![](images/DinoSequentialSmaller.gif){.r-stretch}
 
 ::: notes
 -   This phenomenom expands to more than just the 4 example datasets that I showed, but we have 13 datasets as seen on this slide that have near identical summary measures when visualized.
@@ -223,7 +220,7 @@ plots$D
 
 # They can appear drastically different when visualized!
 
-## Datasaurus Dozen
+## Datasaurus Dozen {.bigger}
 
 * The original "Datasaurus" or "dino" was created by **Alberto Cairo** in the following [blog post](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)
 
