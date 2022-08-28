@@ -23,7 +23,11 @@ library(gtExtras)
 
 ::: {style="text-align:center"}
 | Michael Luu, MPH
+<<<<<<< HEAD
 | Biostatistics & Bioinformatics Research Center
+=======
+| Biostatistics & Bioinformatics Research Center 
+>>>>>>> dff32a9e1b603ba7b37e994ebff6a6a0061d62c7
 | Cedars Sinai Medical Center
 | `r format(Sys.Date(), '%B %d, %Y')`
 :::
@@ -164,25 +168,45 @@ plots <- map(plot_data, ~ {
 ::: panel-tabset
 ### A
 
+<<<<<<< HEAD
 ```{r, fig.align='center', out.width='100%'}
+=======
+```{r}
+#| fig-align: center
+>>>>>>> dff32a9e1b603ba7b37e994ebff6a6a0061d62c7
 plots$A
 ```
 
 ### B
 
+<<<<<<< HEAD
 ```{r, fig.align='center', out.width='100%'}
+=======
+```{r}
+#| fig-align: center
+>>>>>>> dff32a9e1b603ba7b37e994ebff6a6a0061d62c7
 plots$B
 ```
 
 ### C
 
+<<<<<<< HEAD
 ```{r, fig.align='center', out.width='100%'}
+=======
+```{r}
+#| fig-align: center
+>>>>>>> dff32a9e1b603ba7b37e994ebff6a6a0061d62c7
 plots$C
 ```
 
 ### D
 
+<<<<<<< HEAD
 ```{r, fig.align='center', out.width='100%'}
+=======
+```{r}
+#| fig-align: center
+>>>>>>> dff32a9e1b603ba7b37e994ebff6a6a0061d62c7
 plots$D
 ```
 :::
@@ -196,7 +220,6 @@ plots$D
 ```{r, fig.align='center', out.width='100%'}
 knitr::include_graphics('images/blow-mind-mind-blown.gif')
 ```
-
 
 ::: notes
 -   You might be thinking, what is going on!? I just showed you four different datasets with identical or near identical summary measures, yet we have these unique and interesting figures...
