@@ -197,7 +197,6 @@ plots$D
 knitr::include_graphics('images/blow-mind-mind-blown.gif')
 ```
 
-
 ::: notes
 -   You might be thinking, what is going on!? I just showed you four different datasets with identical or near identical summary measures, yet we have these unique and interesting figures...
 :::
