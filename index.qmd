@@ -211,6 +211,10 @@ knitr::include_graphics('images/blow-mind-mind-blown.gif')
 knitr::include_graphics('images/DinoSequentialSmaller.gif')
 ```
 
+::: aside
+* https://www.autodesk.com/research/publications/same-stats-different-graphs
+:::
+
 ::: notes
 -   This phenomenom expands to more than just the 4 example datasets that I showed, but we have 13 datasets as seen on this slide that have near identical summary measures when visualized.
 
