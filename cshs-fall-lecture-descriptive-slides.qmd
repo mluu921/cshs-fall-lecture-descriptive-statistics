@@ -1,10 +1,10 @@
 ---
 format: 
   revealjs:
-    theme: [default]
+    theme: [default, custom.scss]
     slide-number: true
     transition: fade
-    footer: Biostatistics & Bioinformatics Research Center
+    footer: Biostatistics & Bioinformatics Research Center | Cedars Sinai
     menu: true
     overview: true
     chalkboard: true
@@ -12,8 +12,6 @@ self-contained: false
 editor_options: 
   chunk_output_type: console
 ---
-
-# [Graphical Descriptive Statistics]{.r-fit-text}
 
 ```{r}
 library(tidyverse)
@@ -25,10 +23,12 @@ library(gtExtras)
 
 ```
 
-::: {style="text-align:center"}
+# Descriptive Statistics
+[The Importance of Visualization]{.teal style='font-size:1.2em;'}
+
+::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH
-| Biostatistics & Bioinformatics Research Center
-| Cedars Sinai Medical Center
+| Biostatistics & Bioinformatics Research Center | Cedars Sinai Medical Center
 | `r format(Sys.Date(), '%B %d, %Y')`
 :::
 
@@ -223,9 +223,11 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 
 ## Datasaurus Dozen {.smaller}
 
--   The original "Datasaurus" or "dino" was created by **Alberto Cairo** in the following [blog post](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)^[http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html]
+::: incremental
+-   The original "Datasaurus" or "dino" was created by [Alberto Cairo]{.bold-highlight} in the following [blog post](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)^[<http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html>]
 
--   He was then later made famous by the paper published by **Justin Matejka** and **George Fitzmaurize**, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs)^[https://www.autodesk.com/research/publications/same-stats-different-graphs], where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
+-   He was then later made famous by the paper published by [Justin Matejka]{.bold-highlight} and [George Fitzmaurize]{.bold-highlight}, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs)^[<https://www.autodesk.com/research/publications/same-stats-different-graphs>], where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
+:::
 
 ::: notes
 -   Now a little background on the dataset that I showed - The dataset is called the datasaurus dozen
@@ -255,10 +257,11 @@ ggplot(data, aes(x = x, y = y)) +
 
 ## Anscombe Quartet
 
-* The datasaurus dozen is a modern take on the classical **"Anscombe's Quartet"**
-  - Anscombe, F. J. (1973). "Graphs in Statistical Analysis". American Statistician. 27 (1): 17–21. doi:10.1080/00031305.1973.10478966. JSTOR 2682899
+::: incremental
+* The datasaurus dozen is a modern take on the classical ["Anscombe's Quartet"]{.bold-highlight}^[Anscombe, F. J. (1973). "Graphs in Statistical Analysis". American Statistician. 27 (1): 17–21. doi:10.1080/00031305.1973.10478966. JSTOR 2682899]
   
-  - Comprised of four datasets that have nearly identical simple summary measures, yet have very different distributions and appear vastly different when plotted
+* Comprised of four datasets that have nearly identical simple summary measures, yet have very different distributions and appear vastly different when plotted
+:::
 
 ## Anscombe Quartet
 
@@ -397,6 +400,7 @@ local({
 
 ## Dot plot {.smaller}
 
+::: incremental
 * Useful for small to moderate sized data
 
 * Allows us to visualize the spread and distribution of one continuous discrete variables
@@ -409,6 +413,8 @@ local({
 * Highlights clusters, gaps, and outliers
 
 * Intuitive and easy to understand
+:::
+
 
 ```{r, fig.height=4, fig.width=10, fig.align='center', out.width='60%'}
 
@@ -447,6 +453,8 @@ local({
 
 ::: {.column width='60%'}
 
+::: incremental
+
 * Useful for all sized data (small and large)
 
 * Allows us to visualize the spread and distribution of continuous variables
@@ -458,6 +466,7 @@ local({
 * The y axis or the height of the bar represents the count of the number of values that fall into each bin
 
 * The y axis is also commonly normalized to 'relative' frequencies to show the proportion of cases or density that falls into each bin.
+:::
 
 :::
 
@@ -491,9 +500,8 @@ local({
 
 ##  Distribution
 
-> "A distribution is simply a collection of data, or scores, on a variable. Usually, these scores are arranged in order from smallest to largest and then they can be presented graphically."
+> "A distribution is simply a collection of data, or scores, on a variable. Usually, these scores are arranged in order from smallest to largest and then they can be presented graphically."^[Page 6, Statistics in Plain English, Third Edition, 2010.]
 
-— Page 6, Statistics in Plain English, Third Edition, 2010.
 
 ##  Distribution
 
@@ -572,9 +580,13 @@ knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 
 ## Scatter plot {.smaller}
 
+::: incremental
+
 * Used to visualize the relationship between two continuous variables
 
 * Useful for detecting patterns that are obscured from quantitative summaries like what we observed in Anscombe's quartet and the Datasaurus dozen.
+
+:::
 
 ```{r, fig.height=4, fig.width=6, out.width='60%', fig.align='center'}
 
@@ -597,13 +609,11 @@ local({
 
 :::
 
-## Bar plot
+## Bar plot {.smaller}
 
-:::: {.columns}
+::: incremental
 
-::: {.column width='60%'}
-
-* Useful for visualizing **categorical** data
+* Useful for visualizing [categorical]{.bold-highlight} data
 
 * Commonly used to present counts and proportion of each level
 
@@ -611,9 +621,7 @@ local({
 
 :::
 
-::: {.column width='40%'}
-
-```{r, fig.height=6, fig.width=4, out.width='100%', fig.align='center'}
+```{r, fig.height=4, fig.width=12, out.width='100%', fig.align='center'}
 
 local({
   set.seed(1)
@@ -663,21 +671,17 @@ local({
     coord_cartesian(ylim = c(0, 1)) +
     scale_y_continuous(labels = scales::percent)
 
-  plota / plotb
+  plota | plotb
 
 })
 
 ```
 
-:::
-
-::::
-
 # However...
 
 # Bar plots are commonly misued!
 
-## How NOT to Bar Plot
+## How [NOT]{.teal} to Bar Plot
 
 ```{r, out.width='70%', fig.align='center'}
 knitr::include_graphics('images/how_not_to_barplot.PNG')
@@ -702,15 +706,17 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 :::
 
-## How NOT to Bar Plot {.smaller}
+## How [NOT]{.teal} to Bar Plot {.smaller}
 
-* Although frequently found and prevalent in the literature, this is NOT to be used to describe mean and dispersion (continuous data)
+::: incremental
+* Although frequently found and prevalent in the literature, this is [NOT]{.teal} to be used to describe mean and dispersion (continuous data)
 
 * Only shows one arm of the error bar, making overlap comparisons difficult
 
 * Promotes misconception of the mean being related to its height rather the position of the top of the bar
 
 * Obscures the distribution and spread of the data
+:::
 
 ```{r, fig.height=4, fig.width=8, fig.align='center', out.width='80%'}
 
@@ -755,6 +761,8 @@ local({
 
 ::: {.column width='60%'}
 
+::: incremental
+
 * Useful for describing continuous variables following a uni-modal distribution
   - e.g. a single peak
 
@@ -766,6 +774,8 @@ local({
 
 * The 'whiskers' are artificial 'fences' that helps identify potential outliers in the data
   - Defined as Q1 - 1.5\*IQR and Q3 + 1.5\*IQR
+
+:::
 
 :::
 
@@ -811,6 +821,10 @@ knitr::include_graphics('images/boxplot_explained.png')
 knitr::include_graphics('images/BoxViolinSmaller.gif')
 ```
 
+::: aside
+* <https://www.autodesk.com/research/publications/same-stats-different-graphs>
+:::
+
 ::: notes
 
 * As we learned from the beginning of the talk, quantitative summaries can be deceiving
@@ -827,6 +841,7 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 
 ## Violin plot {.smaller}
 
+::: incremental
 * Violin plots are box plots, with an overlay of the density distribution (histogram) of the data
 
 * More informative than a simple box plot
@@ -835,6 +850,7 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 
 * Especially useful for bimodal or multimodal distribution
   * e.g. distribution of data with multiple peaks
+:::
 
 ```{r, fig.height=4, fig.width=8, out.width='70%', fig.align='center'}
 
