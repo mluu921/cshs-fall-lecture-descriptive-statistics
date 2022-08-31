@@ -955,7 +955,7 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 ::: {.column width='50%'}
 
 ::: {.fragment}
-* **One continuous variable** 
+* [One continuous variable]{.bold-highlight}
   - Dot plot
   - Histogram
   - Box plot
@@ -964,7 +964,7 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 :::
 
 ::: {.fragment}
-* **One categorical variable** 
+* [One categorical variable]{.bold-highlight}
   - Bar plot
 :::
 
@@ -973,13 +973,13 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 ::: {.column width='50%'}
 
 ::: {.fragment}
-* **Two continuous variable**
+* [Two continuous variable]{.bold-highlight}
   - Scatter plot
 
 :::
 
 ::: {.fragment}
-* **One continuous by categorical variable**
+* [One continuous by categorical variable]{.bold-highlight}
   - Dot plot
   - Box plot
   - Violin plot
