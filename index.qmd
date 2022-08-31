@@ -13,6 +13,9 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Descriptive Statistics
+[The Importance of Visualization]{.teal style='font-size:1.2em;'}
+
 ```{r}
 library(tidyverse)
 library(datasauRus)
@@ -22,9 +25,6 @@ library(datasauRus)
 library(gtExtras)
 
 ```
-
-# Descriptive Statistics
-[The Importance of Visualization]{.teal style='font-size:1.2em;'}
 
 ::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH
