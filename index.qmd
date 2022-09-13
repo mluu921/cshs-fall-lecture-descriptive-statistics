@@ -7,8 +7,8 @@ format:
     footer: Biostatistics & Bioinformatics Research Center | Cedars Sinai
     menu: true
     overview: true
-    chalkboard: true
-self-contained: false
+    chalkboard: false
+self-contained: true
 editor_options: 
   chunk_output_type: console
 ---
@@ -27,15 +27,15 @@ library(gtExtras)
 ```
 
 ::: {style="text-align: left; font-size: .7em"}
-| Michael Luu, MPH
+| Michael Luu, MPH | Marie Lauzon, MS
 | Biostatistics & Bioinformatics Research Center | Cedars Sinai Medical Center
-| `r format(Sys.Date(), '%B %d, %Y')`
+| September 13, 2022
 :::
 
 ::: notes
 -   Hi Everyone - My name is Michael Luu, and I'm a Research Biostatistician here at the Biostatistics Core as part of Cedar Sinai Cancer Center. Today I will be talking about graphical descriptive statistics. The objective of my talk is to provide a motivating example on the need to visualize our data, as well as provide some of the basic tools and types of simple figures you can use to accomplish this goal.
 
--   So to start off my talk, I want to provide a motivating example -
+-   So to start off my talk, I want to provide a motivating example and pose this question -
 :::
 
 # Why do we need to visualize our data?
@@ -68,13 +68,14 @@ iwalk(plot_data, ~ {
   
   cat('### ', .y, '\n\n')
   
-  .x |> 
-    head(n=10) |> 
-    gt() |> 
-    gt_theme_538() |> 
+  .x %>% 
+    head(n=10) %>% 
+    gt() %>% 
+    fmt_number(columns = c('x', 'y'), decimals = 1) %>%
+    gt_theme_538() %>% 
     tab_options(
       table.font.size = px(30)
-    ) |>
+    ) %>% 
     print()
   
   cat('\n\n')
@@ -88,7 +89,7 @@ iwalk(plot_data, ~ {
 
 -   Of note, these are truncated versions of the full dataset, where i'm only showing the first 10 rows due to space.
 
--   Each dataset has 3 variables, the dataset variable, X, and Y
+-   Each dataset has 2 variables, X, and Y
 
 -   X, and Y are both continuous variables as seen on this slide
 :::
@@ -103,20 +104,20 @@ iwalk(plot_data, ~ {
 
 ```{r}
 
-plot_data |>
-  enframe() |>
+plot_data %>% 
+  enframe() %>% 
   mutate(
     n = map_int(value, ~ nrow(.x)),
     mean_x = map_dbl(value, ~ mean(.x$x)),
     sd_x = map_dbl(value, ~ sd(.x$x)),
     mean_y = map_dbl(value, ~ mean(.x$y)),
     sd_y = map_dbl(value, ~ sd(.x$y))
-  ) |>
-  mutate(across(c(mean_x, sd_x, mean_y, sd_y), ~ scales::label_number(.02)(.x))) |>
-  select(-value) |>
-  rename('dataset' = name) |>
+  ) %>% 
+  mutate(across(c(mean_x, sd_x, mean_y, sd_y), ~ scales::label_number(.1)(.x))) %>% 
+  select(-value) %>% 
+  rename('dataset' = name) %>% 
   gt() %>%
-  gtExtras::gt_theme_538() |>
+  gtExtras::gt_theme_538() %>% 
   tab_options(table.font.size = px(40))
 
 
@@ -447,8 +448,6 @@ local({
 
 * One of the most basic visualizations that allows you to get a sense of the data is the dot plot.
 
-* If we take another sample - the figure may look difference
-
 :::
 
 ## Histogram {.smaller}
@@ -562,7 +561,7 @@ knitr::include_graphics('images/univariate_continuous_distributrions.PNG')
 
 ::: notes
 
-* The normal distribution is just one of many probability distributions as visualized in the following figures
+* The normal distribution is just one of many univariate continuous distributions as visualized in the following figures
 
 * Shown on this slide are just a small snapshot of the distributions that have been studied
 
@@ -609,7 +608,7 @@ local({
 
 ::: notes
 
-* Next I wanted to reintroduce the scatter plot -
+* Next I wanted to reintroduce the scatter plot
 
 :::
 
@@ -964,7 +963,7 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 :::
 
 ::: {.fragment}
-* [One categorical variable]{.bold-highlight}
+* [One or more categorical variable]{.bold-highlight}
   - Bar plot
 :::
 
