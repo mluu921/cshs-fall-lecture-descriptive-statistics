@@ -29,7 +29,7 @@ library(gtExtras)
 ::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH | Marie Lauzon, MS
 | Biostatistics & Bioinformatics Research Center | Cedars Sinai Medical Center
-| September 13, 2022
+| September 12, 2023
 :::
 
 ::: notes
