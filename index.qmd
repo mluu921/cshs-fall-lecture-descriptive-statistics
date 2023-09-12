@@ -38,6 +38,21 @@ library(gtExtras)
 -   So to start off my talk, I want to provide a motivating example and pose this question -
 :::
 
+# {.smaller}
+
+Slides can be accessed with the following link:
+
+https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics
+
+Also available as a PDF on Box
+
+::: notes
+
+-   So to start off my talk, I want to provide a motivating example and pose this question
+
+:::
+
+
 # Why do we need to visualize our data?
 
 ## Data
