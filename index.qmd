@@ -77,30 +77,38 @@ plot_data <- plot_data %>%
   group_nest(dataset) %>%
   deframe()
 
-iwalk(plot_data, ~ {
+imap_chr(plot_data, \(x, title) {
   
-  cat('### ', .y, '\n\n')
-  
-  .x %>% 
-    head(n=10) %>% 
-    gt() %>% 
+  table <- x %>%
+    head(n = 5) %>%
+    gt() %>%
     fmt_number(columns = c('x', 'y'), decimals = 1) %>%
-    gt_theme_538() %>% 
-    tab_options(
-      table.font.size = px(30)
-    ) %>% 
-    print()
+    gt_theme_538() %>%
+    tab_options(table.font.size = px(40)) 
   
-  cat('\n\n')
   
-})
+  text <- glue::glue(
+    '### {title}',
+    '```{{r}}',
+    'table',
+    '```',
+    .sep = '\n'
+  )
+  
+  knitr::knit_child(
+    text = text,
+    envir = environment(),
+    quiet = TRUE
+  )
+
+}) |> cat(sep = '\n')
 ```
 :::
 
 ::: notes
 -   What I'm showing here are 4 unique datasets - dataset A, B, C, and D.
 
--   Of note, these are truncated versions of the full dataset, where i'm only showing the first 10 rows due to space.
+-   Of note, these are truncated versions of the full dataset, where i'm only showing the first 5 rows due to space.
 
 -   Each dataset has 2 variables, X, and Y
 
