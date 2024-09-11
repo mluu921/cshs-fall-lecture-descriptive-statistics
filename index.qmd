@@ -4,8 +4,8 @@ format:
     theme: [default, custom.scss]
     slide-number: true
     transition: fade
-    footer: Biostatistics & Bioinformatics Research Center | Cedars Sinai
-    menu: true
+    footer: Biostatistics Shared Resource | Cedars Sinai
+    menu: false
     overview: true
     chalkboard: false
 editor_options: 
