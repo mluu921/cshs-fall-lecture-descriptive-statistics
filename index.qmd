@@ -27,7 +27,7 @@ library(gtExtras)
 
 ::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH | Marie Lauzon, MS
-| Biostatistics & Bioinformatics Research Center | Cedars Sinai Medical Center
+| Biostatistics Shared Resource | Cedars Sinai Medical Center
 | September 11, 2024
 :::
 
