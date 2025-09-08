@@ -8,8 +8,10 @@ format:
     menu: false
     overview: true
     chalkboard: false
+    lightbox: true
 editor_options: 
   chunk_output_type: console
+cache: true
 ---
 
 # Descriptive Statistics
@@ -28,7 +30,7 @@ library(gtExtras)
 ::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH | Marie Lauzon, MS
 | Biostatistics Shared Resource | Cedars Sinai Medical Center
-| September 11, 2024
+| September 9, 2025
 :::
 
 ::: notes
@@ -58,35 +60,34 @@ Also available as a PDF on Onedrive
 ```{r}
 data <- datasauRus::datasaurus_dozen
 
-plot_data <- data |> 
-  filter(dataset %in% c('dino', 'star', 'x_shape', 'circle')) |> 
-  mutate(dataset = factor(
-    dataset,
-    levels = c('dino', 'star', 'x_shape', 'circle'),
-    labels = LETTERS[1:4]
-  ))
+plot_data <- data |>
+  filter(dataset %in% c('dino', 'star', 'x_shape', 'circle')) |>
+  mutate(
+    dataset = factor(
+      dataset,
+      levels = c('dino', 'star', 'x_shape', 'circle'),
+      labels = LETTERS[1:4]
+    )
+  )
 
 ```
 
 ::: panel-tabset
 ```{r}
 #| results: asis
-#| 
 
 plot_data <- plot_data %>%
   group_nest(dataset) %>%
   deframe()
 
 imap_chr(plot_data, \(x, title) {
-  
   table <- x %>%
     head(n = 5) %>%
     gt() %>%
     fmt_number(columns = c('x', 'y'), decimals = 1) %>%
-    gt_theme_538() %>%
-    tab_options(table.font.size = px(40)) 
-  
-  
+    # gt_theme_538() %>%
+    tab_options(table.font.size = px(40))
+
   text <- glue::glue(
     '### {title}',
     '```{{r}}',
@@ -94,15 +95,16 @@ imap_chr(plot_data, \(x, title) {
     '```',
     .sep = '\n'
   )
-  
+
   knitr::knit_child(
     text = text,
     envir = environment(),
     quiet = TRUE
   )
-
-}) |> cat(sep = '\n')
+}) |>
+  cat(sep = '\n')
 ```
+
 :::
 
 ::: notes
@@ -125,20 +127,22 @@ imap_chr(plot_data, \(x, title) {
 
 ```{r}
 
-plot_data %>% 
-  enframe() %>% 
+plot_data |>
+  enframe() |>
   mutate(
     n = map_int(value, ~ nrow(.x)),
     mean_x = map_dbl(value, ~ mean(.x$x)),
     sd_x = map_dbl(value, ~ sd(.x$x)),
     mean_y = map_dbl(value, ~ mean(.x$y)),
     sd_y = map_dbl(value, ~ sd(.x$y))
-  ) %>% 
-  mutate(across(c(mean_x, sd_x, mean_y, sd_y), ~ scales::label_number(.1)(.x))) %>% 
-  select(-value) %>% 
-  rename('dataset' = name) %>% 
-  gt() %>%
-  gtExtras::gt_theme_538() %>% 
+  ) %>%
+  mutate(across(
+    c(mean_x, sd_x, mean_y, sd_y),
+    ~ scales::label_number(.1)(.x)
+  )) |>
+  select(-value) |>
+  rename('dataset' = name) |>
+  gt() |>
   tab_options(table.font.size = px(40))
 
 
@@ -176,41 +180,53 @@ It appears the counts (n), mean (x), mean (y), and sd (x) and sd (y) are identic
 
 ```{r}
 
-plots <- map(plot_data, ~ {
-  plot <- ggplot(.x, aes(x = x, y = y)) +
-    geom_point(size = 2) +
-    coord_equal(xlim = c(0, 100), ylim = c(0, 100)) +
-    theme_bw(base_size = 20)
-  
-  plot
-})
+plots <- map(
+  plot_data,
+  ~ {
+    plot <- ggplot(.x, aes(x = x, y = y)) +
+      geom_point(size = 2) +
+      coord_equal(xlim = c(0, 100), ylim = c(0, 100)) +
+      theme_bw(base_size = 20)
+
+    plot
+  }
+)
 
 ```
 
 ::: panel-tabset
 ### A
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 plots$A
 ```
 
 ### B
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 plots$B
 ```
 
 ### C
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 plots$C
 ```
 
 ### D
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 plots$D
 ```
+
 :::
 
 ::: notes
@@ -219,7 +235,9 @@ plots$D
 
 ## 
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 knitr::include_graphics('images/blow-mind-mind-blown.gif')
 ```
 
@@ -229,7 +247,9 @@ knitr::include_graphics('images/blow-mind-mind-blown.gif')
 
 ## 
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 knitr::include_graphics('images/DinoSequentialSmaller.gif')
 ```
 
@@ -260,12 +280,16 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 :::
 
 ## Datasaurus Dozen
-```{r, out.width='80%', fig.height=8, fig.width=12, fig.align='center'}
+```{r}
+#| fig-align: center
+#| out-width: 80%
+#| fig.height: 8
+#| fig.width: 12
 data <- datasauRus::datasaurus_dozen
 
-ggplot(data, aes(x = x, y = y)) + 
+ggplot(data, aes(x = x, y = y)) +
   geom_point() +
-  facet_wrap(~dataset, ncol = 5) + 
+  facet_wrap(~dataset, ncol = 5) +
   theme_minimal()
 
 ```
@@ -294,125 +318,307 @@ ggplot(data, aes(x = x, y = y)) +
 ```{r}
 
 local({
-  
-    data <- tibble::tribble(
-    ~dataset,  ~x,    ~y,
-         "I", 10L,  8.04,
-         "I",  8L,  6.95,
-         "I", 13L,  7.58,
-         "I",  9L,  8.81,
-         "I", 11L,  8.33,
-         "I", 14L,  9.96,
-         "I",  6L,  7.24,
-         "I",  4L,  4.26,
-         "I", 12L, 10.84,
-         "I",  7L,  4.82,
-         "I",  5L,  5.68,
-        "II", 10L,  9.14,
-        "II",  8L,  8.14,
-        "II", 13L,  8.74,
-        "II",  9L,  8.77,
-        "II", 11L,  9.26,
-        "II", 14L,   8.1,
-        "II",  6L,  6.13,
-        "II",  4L,   3.1,
-        "II", 12L,  9.13,
-        "II",  7L,  7.26,
-        "II",  5L,  4.74,
-       "III", 10L,  7.46,
-       "III",  8L,  6.77,
-       "III", 13L, 12.74,
-       "III",  9L,  7.11,
-       "III", 11L,  7.81,
-       "III", 14L,  8.84,
-       "III",  6L,  6.08,
-       "III",  4L,  5.39,
-       "III", 12L,  8.15,
-       "III",  7L,  6.42,
-       "III",  5L,  5.73,
-        "IV",  8L,  6.58,
-        "IV",  8L,  5.76,
-        "IV",  8L,  7.71,
-        "IV",  8L,  8.84,
-        "IV",  8L,  8.47,
-        "IV",  8L,  7.04,
-        "IV",  8L,  5.25,
-        "IV", 19L,  12.5,
-        "IV",  8L,  5.56,
-        "IV",  8L,  7.91,
-        "IV",  8L,  6.89
-    )
-    
-    data %>%
-      group_by(dataset) %>%
-      summarise(
-        n = n(),
-        mean_x = mean(x),
-        sd_x = sd(x),
-        meay_y = mean(y),
-        sd_y = sd(y)
-      ) %>%
-      mutate(across(where(is.numeric), ~ scales::number(.x, .01))) %>%
-      knitr::kable()
+  data <- tibble::tribble(
+    ~dataset,
+    ~x,
+    ~y,
+    "I",
+    10L,
+    8.04,
+    "I",
+    8L,
+    6.95,
+    "I",
+    13L,
+    7.58,
+    "I",
+    9L,
+    8.81,
+    "I",
+    11L,
+    8.33,
+    "I",
+    14L,
+    9.96,
+    "I",
+    6L,
+    7.24,
+    "I",
+    4L,
+    4.26,
+    "I",
+    12L,
+    10.84,
+    "I",
+    7L,
+    4.82,
+    "I",
+    5L,
+    5.68,
+    "II",
+    10L,
+    9.14,
+    "II",
+    8L,
+    8.14,
+    "II",
+    13L,
+    8.74,
+    "II",
+    9L,
+    8.77,
+    "II",
+    11L,
+    9.26,
+    "II",
+    14L,
+    8.1,
+    "II",
+    6L,
+    6.13,
+    "II",
+    4L,
+    3.1,
+    "II",
+    12L,
+    9.13,
+    "II",
+    7L,
+    7.26,
+    "II",
+    5L,
+    4.74,
+    "III",
+    10L,
+    7.46,
+    "III",
+    8L,
+    6.77,
+    "III",
+    13L,
+    12.74,
+    "III",
+    9L,
+    7.11,
+    "III",
+    11L,
+    7.81,
+    "III",
+    14L,
+    8.84,
+    "III",
+    6L,
+    6.08,
+    "III",
+    4L,
+    5.39,
+    "III",
+    12L,
+    8.15,
+    "III",
+    7L,
+    6.42,
+    "III",
+    5L,
+    5.73,
+    "IV",
+    8L,
+    6.58,
+    "IV",
+    8L,
+    5.76,
+    "IV",
+    8L,
+    7.71,
+    "IV",
+    8L,
+    8.84,
+    "IV",
+    8L,
+    8.47,
+    "IV",
+    8L,
+    7.04,
+    "IV",
+    8L,
+    5.25,
+    "IV",
+    19L,
+    12.5,
+    "IV",
+    8L,
+    5.56,
+    "IV",
+    8L,
+    7.91,
+    "IV",
+    8L,
+    6.89
+  )
+
+  data |>
+    group_by(dataset) |>
+    summarise(
+      n = n(),
+      mean_x = mean(x),
+      sd_x = sd(x),
+      meay_y = mean(y),
+      sd_y = sd(y)
+    ) |>
+    mutate(across(where(is.numeric), ~ scales::number(.x, .01))) |>
+    knitr::kable()
 })
 ```
 
-```{r, out.width='100%', fig.height=3, fig.width=12, fig.align='center'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
+#| fig.height: 3
+#| fig.width: 12
+
 local({
   data <- tibble::tribble(
-    ~dataset,  ~x,    ~y,
-         "I", 10L,  8.04,
-         "I",  8L,  6.95,
-         "I", 13L,  7.58,
-         "I",  9L,  8.81,
-         "I", 11L,  8.33,
-         "I", 14L,  9.96,
-         "I",  6L,  7.24,
-         "I",  4L,  4.26,
-         "I", 12L, 10.84,
-         "I",  7L,  4.82,
-         "I",  5L,  5.68,
-        "II", 10L,  9.14,
-        "II",  8L,  8.14,
-        "II", 13L,  8.74,
-        "II",  9L,  8.77,
-        "II", 11L,  9.26,
-        "II", 14L,   8.1,
-        "II",  6L,  6.13,
-        "II",  4L,   3.1,
-        "II", 12L,  9.13,
-        "II",  7L,  7.26,
-        "II",  5L,  4.74,
-       "III", 10L,  7.46,
-       "III",  8L,  6.77,
-       "III", 13L, 12.74,
-       "III",  9L,  7.11,
-       "III", 11L,  7.81,
-       "III", 14L,  8.84,
-       "III",  6L,  6.08,
-       "III",  4L,  5.39,
-       "III", 12L,  8.15,
-       "III",  7L,  6.42,
-       "III",  5L,  5.73,
-        "IV",  8L,  6.58,
-        "IV",  8L,  5.76,
-        "IV",  8L,  7.71,
-        "IV",  8L,  8.84,
-        "IV",  8L,  8.47,
-        "IV",  8L,  7.04,
-        "IV",  8L,  5.25,
-        "IV", 19L,  12.5,
-        "IV",  8L,  5.56,
-        "IV",  8L,  7.91,
-        "IV",  8L,  6.89
-    )
-  
-  ggplot(data, aes(x = x, y = y)) + 
-    geom_point() + 
-    facet_wrap(~dataset, ncol = 4) + 
-    theme_minimal(base_size = 15)
+    ~dataset,
+    ~x,
+    ~y,
+    "I",
+    10L,
+    8.04,
+    "I",
+    8L,
+    6.95,
+    "I",
+    13L,
+    7.58,
+    "I",
+    9L,
+    8.81,
+    "I",
+    11L,
+    8.33,
+    "I",
+    14L,
+    9.96,
+    "I",
+    6L,
+    7.24,
+    "I",
+    4L,
+    4.26,
+    "I",
+    12L,
+    10.84,
+    "I",
+    7L,
+    4.82,
+    "I",
+    5L,
+    5.68,
+    "II",
+    10L,
+    9.14,
+    "II",
+    8L,
+    8.14,
+    "II",
+    13L,
+    8.74,
+    "II",
+    9L,
+    8.77,
+    "II",
+    11L,
+    9.26,
+    "II",
+    14L,
+    8.1,
+    "II",
+    6L,
+    6.13,
+    "II",
+    4L,
+    3.1,
+    "II",
+    12L,
+    9.13,
+    "II",
+    7L,
+    7.26,
+    "II",
+    5L,
+    4.74,
+    "III",
+    10L,
+    7.46,
+    "III",
+    8L,
+    6.77,
+    "III",
+    13L,
+    12.74,
+    "III",
+    9L,
+    7.11,
+    "III",
+    11L,
+    7.81,
+    "III",
+    14L,
+    8.84,
+    "III",
+    6L,
+    6.08,
+    "III",
+    4L,
+    5.39,
+    "III",
+    12L,
+    8.15,
+    "III",
+    7L,
+    6.42,
+    "III",
+    5L,
+    5.73,
+    "IV",
+    8L,
+    6.58,
+    "IV",
+    8L,
+    5.76,
+    "IV",
+    8L,
+    7.71,
+    "IV",
+    8L,
+    8.84,
+    "IV",
+    8L,
+    8.47,
+    "IV",
+    8L,
+    7.04,
+    "IV",
+    8L,
+    5.25,
+    "IV",
+    19L,
+    12.5,
+    "IV",
+    8L,
+    5.56,
+    "IV",
+    8L,
+    7.91,
+    "IV",
+    8L,
+    6.89
+  )
 
-  
+  ggplot(data, aes(x = x, y = y)) +
+    geom_point() +
+    facet_wrap(~dataset, ncol = 4) +
+    theme_minimal(base_size = 15)
 })
 ```
 
@@ -442,7 +648,11 @@ local({
 :::
 
 
-```{r, fig.height=4, fig.width=10, fig.align='center', out.width='60%'}
+```{r}
+#| fig.align: center
+#| out-width: 60%
+#| fig.height: 4
+#| fig.width: 10
 
 local({
   set.seed(5)
@@ -460,7 +670,6 @@ local({
     scale_x_continuous(breaks = seq(0, 50, 5)) +
     scale_y_continuous(breaks = NULL) +
     labs(y = NULL)
-
 })
 
 ```
@@ -495,7 +704,12 @@ local({
 :::
 
 ::: {.column width='40%'}
-```{r, fig.height=8, fig.width=6}
+
+```{r}
+#| fig.align: center
+#| out-width: 100%
+#| fig.height: 8
+#| fig.width: 6
 
 local({
   set.seed(1)
@@ -514,10 +728,10 @@ local({
     theme_minimal(base_size = 15)
 
   plot_a / plot_b
-
 })
 
 ```
+
 :::
 
 ::::
@@ -529,7 +743,11 @@ local({
 
 ##  Distribution
 
-```{r, fig.align='center', fig.width=6, fig.height=4, out.width='75%'}
+```{r}
+#| fig.align: center
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: 75%
 local({
   set.seed(1)
   data <- tibble(x = rnorm(1000, 25, sd = 2))
@@ -538,9 +756,19 @@ local({
     geom_histogram(color = 'white', binwidth = 1) +
     labs(y = 'Frequency') +
     geom_vline(aes(xintercept = mean(x)), color = 'red', size = 1) +
-    geom_vline(aes(xintercept = median(x)), color = 'green', size = 1, linetype = 'dashed') +
-    geom_vline(aes(xintercept = 25), color = 'blue', size = 1, linetype = 'dotted') +
-    geom_density(aes(y = 1 * ..count..)) + 
+    geom_vline(
+      aes(xintercept = median(x)),
+      color = 'green',
+      size = 1,
+      linetype = 'dashed'
+    ) +
+    geom_vline(
+      aes(xintercept = 25),
+      color = 'blue',
+      size = 1,
+      linetype = 'dotted'
+    ) +
+    geom_density(aes(y = 1 * ..count..)) +
     theme_light(base_size = 15)
 })
 
@@ -561,7 +789,9 @@ local({
 
 ## Normal Distribution
 
-```{r, out.width='65%', fig.align='center'}
+```{r}
+#| fig-align: center
+#| out-width: 65%
 knitr::include_graphics('images/normal_distribution_figure.png')
 ```
 
@@ -573,10 +803,11 @@ knitr::include_graphics('images/normal_distribution_figure.png')
 
 :::
 
-
 ## Univariate Continuous Distributions
 
-```{r, fig.align='center', out.width='75%'}
+```{r}
+#| fig-align: center
+#| out-width: 75%
 knitr::include_graphics('images/univariate_continuous_distributrions.PNG')
 ```
 
@@ -592,7 +823,9 @@ knitr::include_graphics('images/univariate_continuous_distributrions.PNG')
 
 ## Univariate Discrete Distributions
 
-```{r, fig.align='center', out.width='75%'}
+```{r}
+#| fig-align: center
+#| out-width: 75%
 knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 ```
 
@@ -612,13 +845,16 @@ knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 
 :::
 
-```{r, fig.height=4, fig.width=6, out.width='60%', fig.align='center'}
+```{r}
+#| fig-align: center
+#| out-width: 60%
+#| fig-height: 4
+#| fig-width: 6
 
 local({
   set.seed(1)
-  data <- tibble(x = rnorm(25, 25, sd = 5),
-                 y = rnorm(25, 45, sd = 2))
-  
+  data <- tibble(x = rnorm(25, 25, sd = 5), y = rnorm(25, 45, sd = 2))
+
   ggplot(data, aes(x = x, y = y)) +
     geom_point() +
     theme_minimal(base_size = 15)
@@ -635,6 +871,11 @@ local({
 
 ## Bar plot {.smaller}
 
+
+:::: {.columns}
+
+::: {.column width='40%'}
+
 ::: incremental
 
 * Useful for visualizing [categorical]{.bold-highlight} data
@@ -645,12 +886,22 @@ local({
 
 :::
 
-```{r, fig.height=4, fig.width=12, out.width='100%', fig.align='center'}
+:::
+
+::: {.column width='60%'}
+
+```{r}
+#| fig-align: center
+#| out-width: 60%
+#| fig-height: 5
+#| fig-width: 4
 
 local({
   set.seed(1)
-  data <- tibble(x = rnorm(25, 25, sd = 5) %>% round(),
-                 group = sample(c('A', 'B'), size = 25, replace = T))
+  data <- tibble(
+    x = rnorm(25, 25, sd = 5) %>% round(),
+    group = sample(c('A', 'B'), size = 25, replace = T)
+  )
 
   plot_data <- data %>%
     group_by(group) %>%
@@ -662,9 +913,11 @@ local({
   plota <- ggplot(plot_data, aes(x = group, y = n, fill = group)) +
     geom_col() +
     theme_minimal(base_size = 15) +
-    theme(panel.grid.minor = element_blank(),
-          legend.position = 'none',
-          axis.text.x = element_text(face = 'bold')) +
+    theme(
+      panel.grid.minor = element_blank(),
+      legend.position = 'none',
+      axis.text.x = element_text(face = 'bold')
+    ) +
     geom_text(
       aes(label = label, y = n / 2),
       hjust = .5,
@@ -695,19 +948,27 @@ local({
     coord_cartesian(ylim = c(0, 1)) +
     scale_y_continuous(labels = scales::percent)
 
-  plota | plotb
-
+  plota
+  plotb
 })
 
 ```
+
+:::
+
+::::
+
 
 # However...
 
 # Bar plots are commonly misued!
 
-## How [NOT]{.teal} to Bar Plot
+## How [NOT]{.teal} to Bar Plot {.smaller}
 
-```{r, out.width='70%', fig.align='center'}
+```{r}
+#| fig-align: center
+#| out-width: 70%
+
 knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 ## 14 mins here
@@ -732,52 +993,118 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 ## How [NOT]{.teal} to Bar Plot {.smaller}
 
+
+:::: {.columns}
+
+::: {.column width='40%'}
+
 ::: incremental
-* Although frequently found and prevalent in the literature, this is [NOT]{.teal} to be used to describe mean and dispersion (continuous data)
+- Although frequently found and prevalent in the literature, this is [NOT]{.teal} to be used to describe mean and dispersion (continuous data)
 
-* Only shows one arm of the error bar, making overlap comparisons difficult
+- Only shows one arm of the error bar, making overlap comparisons difficult
 
-* Promotes misconception of the mean being related to its height rather the position of the top of the bar
+- Promotes misconception of the mean being related to its height rather the position of the top of the bar
 
-* Obscures the distribution and spread of the data
+- Obscures the distribution and spread of the data
 :::
 
-```{r, fig.height=4, fig.width=8, fig.align='center', out.width='80%'}
+
+:::
+
+::: {.column width='60%'}
+
+```{r}
+#| fig-align: center
+#| out-width: 60%
+#| fig-height: 5
+#| fig-width: 4
 
 local({
-
   set.seed(1)
-  a <- tibble(group = 'A',
-              x = rnorm(n = 100, mean = 50, sd = 10))
+  a <- tibble(group = 'A', x = rnorm(n = 100, mean = 50, sd = 10))
 
   set.seed(2)
-  b <- tibble(group = 'B',
-              x = rnorm(n = 100, mean = 50, sd = 2))
+  b <- tibble(group = 'B', x = rnorm(n = 100, mean = 50, sd = 2))
 
   data <- bind_rows(a, b)
 
-
-  plot_data <- data %>%
-    group_by(group) %>%
+  plot_data <- data |>
+    group_by(group) |>
     summarise(
       mean = mean(x),
       sd = sd(x)
     )
 
   ggplot(plot_data, aes(x = group, y = mean, fill = group)) +
-    geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), width = .1, size = 1) +
+    geom_errorbar(
+      aes(ymin = mean - sd, ymax = mean + sd),
+      width = .1,
+      size = 1
+    ) +
     geom_col() +
     theme_minimal(base_size = 15) +
-    theme(panel.grid.minor = element_blank(),
-          legend.position = 'none',
-          axis.text.x = element_text(face = 'bold')) +
+    theme(
+      panel.grid.minor = element_blank(),
+      legend.position = 'none',
+      axis.text.x = element_text(face = 'bold')
+    ) +
     ggsci::scale_fill_d3() +
     labs(x = NULL)
-
 })
 
 ```
+:::
 
+::::
+
+## Waffle plot {.smaller}
+
+:::: {.columns}
+
+::: {.column width='40%'}
+
+::: incremental
+
+- Similar to bar plots, useful for visualizing categorical data
+- Best used when you want to emphasize the "part-to-whole" relationship in your data
+- Each square represents a fixed number of observations
+- Effective for communicating data to non-technical audiences
+
+:::
+
+:::
+
+::: {.column width='60%'}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 5
+#| out-width: 80%
+#| fig-align: center
+
+library(waffle)
+
+cancer_counts <- c(
+  "Breast" = 45,
+  "Lung" = 25,
+  "Colorectal" = 15,
+  "Prostate" = 10,
+  "Other" = 5
+)
+
+waffle::waffle(
+  parts = cancer_counts,
+  rows = 10,
+  colors = c("#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#B07AA1"),
+  xlab = "1 square = 1 patient"
+) + 
+  theme(legend.position = "bottom")
+
+```
+
+:::
+
+::::
 
 ## Box plot {.smaller}
 
@@ -805,7 +1132,11 @@ local({
 
 ::: {.column width='40%'}
 
-```{r, fig.height=3, fig.width=4, out.width='100%', fig.align='center'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
+#| fig-height: 3
+#| fig-width: 4
 
 set.seed(1)
 data <- tibble(
@@ -817,20 +1148,19 @@ ggplot(data, aes(x = group, y = y, color = group)) +
   stat_boxplot(geom = 'errorbar', width = .1) +
   geom_boxplot(width = .25) +
   theme_minimal(base_size = 15) +
-  theme(legend.position = 'none',
-        axis.text.x = element_text(face = 'bold')) +
+  theme(legend.position = 'none', axis.text.x = element_text(face = 'bold')) +
   ggsci::scale_color_d3() +
   labs(x = NULL)
 
-
-
 ```
 
-```{r, fig.align='center', out.width='100%'}
+```{r}
+#| fig-align: center
+#| out-width: 100%
 
 knitr::include_graphics('images/boxplot_explained.png')
-```
 
+```
 :::
 
 ::::
@@ -841,7 +1171,8 @@ knitr::include_graphics('images/boxplot_explained.png')
 
 ## Box plot
 
-```{r, out.width = '100%'}
+```{r}
+#| out-width: 100%
 knitr::include_graphics('images/BoxViolinSmaller.gif')
 ```
 
@@ -865,6 +1196,10 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 
 ## Violin plot {.smaller}
 
+:::: {.columns}
+
+::: {.column width='40%'}
+
 ::: incremental
 * Violin plots are box plots, with an overlay of the density distribution (histogram) of the data
 
@@ -876,8 +1211,15 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
   * e.g. distribution of data with multiple peaks
 :::
 
-```{r, fig.height=4, fig.width=8, out.width='70%', fig.align='center'}
 
+:::
+
+::: {.column width='60%'}
+```{r}
+#| fig-height: 5
+#| fig-width: 4
+#| out-width: 60%
+#| fig-align: center
 set.seed(1)
 data <- tibble(
   group = sample(c('A', 'B'), 50, replace = T),
@@ -888,18 +1230,22 @@ ggplot(data, aes(x = group, y = y)) +
   geom_boxplot(width = .1, aes(color = group)) +
   geom_violin(aes(fill = group, color = NA), alpha = .2) +
   theme_minimal(base_size = 15) +
-  theme(legend.position = 'none',
-        axis.text.x = element_text(face = 'bold')) +
+  theme(legend.position = 'none', axis.text.x = element_text(face = 'bold')) +
   ggsci::scale_color_d3() +
   ggsci::scale_fill_d3() +
   labs(x = NULL) +
   coord_cartesian(expand = T)
 ```
+:::
+
+::::
+
 
 ## How are violin plots made?
 
-```{r, out.width='100%', fig.align='center'}
-
+```{r}
+#| fig-align: center
+#| out-width: 100%
 knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 
 ```
@@ -914,61 +1260,126 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 
 :::
 
-<!-- ```{r, out.width='100%', fig.align='center'} -->
-<!-- knitr::include_graphics('images/jnci_publication_image.PNG') -->
-<!-- ``` -->
+# Beyond two variables
 
-<!-- ??? -->
+## Bubble Plot {.smaller}
 
-<!-- * I wanted to briefly touch upon the usage of violin plots in the literature and highlight some of our ongoing research that's led by the director of the biostatistic core - Dr. Andre Rogatko -->
+:::: {.columns}
 
-<!-- * We are using data from the NSABP R-04 trial - Neoadjuvant chemotherapy in rectal cancer -->
+::: {.column width='40%'}
 
-<!-- * In this trial - Rectal cancer is treated with presurgical radiation to downstage the tumor, reduce the risk of local recurrence and improve survival -->
+::: incremental
 
-<!-- * R04 first tested infusional 5FU (standard) vs. capecitabine (an oral drug), and then 2x2 factorial design, with or without oxaliplatin -->
+- Visualizes the relationship between two continuous variables, with a third variable represented by the size of the bubbles.
+- Useful for identifying patterns, trends, and clusters in multivariate data.
+- The color of the bubbles can represent a fourth variable, often categorical.
 
-<!-- * The results of the analysis of the NSABP R-04 trial using the toxicity index is detailed in the following article -->
+:::
 
-<!-- * In short, we reanalyzed the clinical trial data using the toxicity index as developed by Rogatko et al. and compared it to using the current standard of assessing toxicity using the maximum reported grade. -->
+:::
 
-<!-- * I also wanted to note that several of the coauthors on this list are also lecturers of this series -->
+::: {.column width='60%'}
 
-<!-- * Rogatko, A., Babb, J. S., Wang, H., Slifker, M. J., & Hudes, G. R. (2004). Patient characteristics compete with dose as predictors of acute treatment toxicity in early phase clinical trials. Clinical Cancer Research, 10(14), 4645-4651. -->
+```{r}
+#| fig-height: 5
+#| fig-width: 4
+#| out-width: 80%
+#| fig-align: center
 
-<!-- --- -->
-<!-- class: -->
+library(gapminder)
+data <- gapminder |> filter(year == "2007") |> dplyr::select(-year)
 
-<!-- <br> -->
-<!-- <br> -->
-<!-- <br> -->
-<!-- <br> -->
+# Most basic bubble plot
+data |>
+  arrange(desc(pop)) |>
+  mutate(country = factor(country, country)) |>
+  ggplot(aes(x = gdpPercap, y = lifeExp, size = pop, color = continent)) +
+  geom_point(alpha = 0.5) +
+  scale_size(range = c(.1, 10), name = "Population (M)") +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "none", panel.grid.minor = element_blank()) +
+  labs(x = 'GDP per capita', y = 'Life Expectancy')
 
-<!-- .pull-left[ -->
-<!-- ```{r,out.width='100%', fig.align='center'} -->
-<!-- knitr::include_graphics('images/violin_plot_maxae_grade.PNG') -->
-<!-- ``` -->
-<!-- ] -->
+```
 
-<!-- .pull-right[ -->
-<!-- ```{r,out.width='100%', fig.align='center'} -->
-<!-- knitr::include_graphics('images/violin_plot_ti.PNG') -->
-<!-- ``` -->
-<!-- ] -->
+:::
+
+::::
+
+::: aside
+
+- Gapminder dataset: <https://www.gapminder.org/data/>
+
+:::
+
+::: notes
+
+- Visualizing country-level data from the Gapminder dataset, where the X axis is GDP per capita, Y axis is life expectancy, each bubble is the country, and the size of the bubbles represents population. The color is depicted as the continent.
+
+:::
+
+## Tile Plots / Heatmaps {.smaller}
+
+:::: {.columns}
+
+::: {.column width='40%'}
+
+::: incremental
+- Used to visualize the relationship between two categorical variables, with a continuous variable represented by color intensity.
+- The color gradient can represent a summary statistic (e.g., mean, median, count) for each combination of the two categorical variables.
+- Useful for identifying patterns, trends, and outliers in multivariate categorical data.
+:::
+
+:::
+
+::: {.column width='60%'}
+```{r}
+#| fig-align: center
+#| out-width: 80%
+#| fig.height: 6
+#| fig.width: 5
+set.seed(123)
+years <- 2015:2022
+regions <- c("North", "South", "East", "West", "Central")
+tile_data <- expand.grid(
+  Year = years,
+  Region = regions
+) %>%
+  mutate(
+    IncidenceRate = round(
+      100 +
+        5 * (Year - 2015) +
+        rnorm(n(), 0, 6) +
+        ifelse(Region == "North", 10, 0) +
+        ifelse(Region == "South", -8, 0) +
+        ifelse(Region == "East", 5, 0),
+      1
+    )
+  )
+
+ggplot(tile_data, aes(x = Year, y = Region, fill = IncidenceRate)) +
+  geom_tile(color = "white") +
+  scale_fill_viridis_c(option = "C") +
+  theme_minimal(base_size = 15) +
+  labs(
+    x = "Year",
+    y = "Region",
+    fill = "Incidence Rate (per 100,000)"
+  ) +
+  theme(
+    legend.position = "bottom"
+  ) +
+  guides(
+    fill = guide_colorbar(barwidth = 20, barheight = 1, title.position = "top")
+  )
+```
+
+:::
+
+::::
 
 
-<!-- ??? -->
-
-<!-- * I wanted to highlight the usage of violin plots that were utilized here in describing the distribution of Max grade and the TI -->
-
-<!-- * Violin plots were able to highlight the multimodal distribution of both the Max grade and the TI that would not have been visible with just a simple box plot. -->
-
-<!-- * Results of the study found the toxicity index was more powerful than the max ae grade, and requiring smaller sample sizes to detect the same differences. -->
-
-
-<!-- --- -->
-
-## Summary
+## Summary {.smaller}
 
 :::: {.columns}
 
@@ -986,11 +1397,8 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 ::: {.fragment}
 * [One or more categorical variable]{.bold-highlight}
   - Bar plot
+  - Waffle plot
 :::
-
-:::
-
-::: {.column width='50%'}
 
 ::: {.fragment}
 * [Two continuous variable]{.bold-highlight}
@@ -998,11 +1406,22 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 
 :::
 
+:::
+
+::: {.column width='50%'}
+
 ::: {.fragment}
 * [One continuous by categorical variable]{.bold-highlight}
   - Dot plot
   - Box plot
   - Violin plot
+:::
+
+::: {.fragment}
+* [Beyond two variables]{.bold-highlight}
+  - Bubble Plot
+  - Tile Plot / Heatmap
+
 :::
 
 :::
