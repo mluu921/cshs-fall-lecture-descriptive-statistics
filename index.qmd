@@ -272,7 +272,7 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 ::: incremental
 -   The original "Datasaurus" or "dino" was created by [Alberto Cairo]{.bold-highlight} in the following [blog post](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)^[<http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html>]
 
--   He was then later made famous by the paper published by [Justin Matejka]{.bold-highlight} and [George Fitzmaurize]{.bold-highlight}, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs)^[<https://www.autodesk.com/research/publications/same-stats-different-graphs>], where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
+-   He was then later popularized by the paper published by [Justin Matejka]{.bold-highlight} and [George Fitzmaurize]{.bold-highlight}, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs)^[<https://www.autodesk.com/research/publications/same-stats-different-graphs>], where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
 :::
 
 ::: notes
@@ -869,6 +869,55 @@ local({
 
 :::
 
+## Waffle plot {.smaller}
+
+:::: {.columns}
+
+::: {.column width='40%'}
+
+::: incremental
+
+- Useful for visualizing [categorical]{.bold-highlight} data, suitable for small to moderate sized data.
+- Best used when you want to emphasize the "part-to-whole" relationship in your data
+- Each square represents a fixed number of observations
+- Effective for communicating data to non-technical audiences
+
+:::
+
+:::
+
+::: {.column width='60%'}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 5
+#| out-width: 80%
+#| fig-align: center
+
+library(waffle)
+
+cancer_counts <- c(
+  "Breast" = 45,
+  "Lung" = 25,
+  "Colorectal" = 15,
+  "Prostate" = 10,
+  "Other" = 5
+)
+
+waffle::waffle(
+  parts = cancer_counts,
+  rows = 10,
+  colors = c("#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#B07AA1"),
+  xlab = "1 square = 1 patient"
+) + 
+  theme(legend.position = "bottom")
+
+```
+
+:::
+
+::::
+
 ## Bar plot {.smaller}
 
 
@@ -1057,55 +1106,6 @@ local({
 
 ::::
 
-## Waffle plot {.smaller}
-
-:::: {.columns}
-
-::: {.column width='40%'}
-
-::: incremental
-
-- Similar to bar plots, useful for visualizing categorical data
-- Best used when you want to emphasize the "part-to-whole" relationship in your data
-- Each square represents a fixed number of observations
-- Effective for communicating data to non-technical audiences
-
-:::
-
-:::
-
-::: {.column width='60%'}
-
-```{r}
-#| fig-height: 6
-#| fig-width: 5
-#| out-width: 80%
-#| fig-align: center
-
-library(waffle)
-
-cancer_counts <- c(
-  "Breast" = 45,
-  "Lung" = 25,
-  "Colorectal" = 15,
-  "Prostate" = 10,
-  "Other" = 5
-)
-
-waffle::waffle(
-  parts = cancer_counts,
-  rows = 10,
-  colors = c("#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#B07AA1"),
-  xlab = "1 square = 1 patient"
-) + 
-  theme(legend.position = "bottom")
-
-```
-
-:::
-
-::::
-
 ## Box plot {.smaller}
 
 :::: {.columns}
@@ -1114,7 +1114,7 @@ waffle::waffle(
 
 ::: incremental
 
-* Useful for describing continuous variables following a uni-modal distribution
+* Useful for describing [continuous]{.bold-highlight} variables following a uni-modal distribution
   - e.g. a single peak
 
 * The box is representative of common quantitative measures
@@ -1190,7 +1190,7 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 
 * As you can see on the left figure, as the raw data gets distorted, we still have identical box plots in the middle, since the properties of a box plot are based on quantitative summaries. It's possible to have identical quantitative summaries, that appear drastically different which the box plot was not able to capture.
 
-* Violin plots are able to capture the change in the data that was just not possible using a simple box plot.
+* Violin plots are able to capture the change in the data that was just not possible using a simple box plot by visualizing the distribution of the data.
 
 :::
 
@@ -1262,6 +1262,12 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 
 # Beyond two variables
 
+::: notes
+
+- Now i'm going to briefly go over two additional types of plots that are useful when you have more than two variables (e.g. three or four variables)
+
+:::
+
 ## Bubble Plot {.smaller}
 
 :::: {.columns}
@@ -1270,9 +1276,10 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 
 ::: incremental
 
-- Visualizes the relationship between two continuous variables, with a third variable represented by the size of the bubbles.
+- Visualizes the relationship between two [continuous]{.bold-highlight} variables, with a third [continuous]{.bold-highlight} variable represented by the size of the bubbles.
+- The color of the bubbles can represent a fourth [categorical]{.bold-highlight} or [continuous]{.bold-highlight}variable.
 - Useful for identifying patterns, trends, and clusters in multivariate data.
-- The color of the bubbles can represent a fourth variable, often categorical.
+
 
 :::
 
@@ -1325,7 +1332,7 @@ data |>
 ::: {.column width='40%'}
 
 ::: incremental
-- Used to visualize the relationship between two categorical variables, with a continuous variable represented by color intensity.
+- Used to visualize the relationship between two [categorical]{.bold-highlight} variables, with a [continuous]{.bold-highlight} variable represented by color intensity.
 - The color gradient can represent a summary statistic (e.g., mean, median, count) for each combination of the two categorical variables.
 - Useful for identifying patterns, trends, and outliers in multivariate categorical data.
 :::
