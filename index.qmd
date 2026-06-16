@@ -4,7 +4,7 @@ format:
     theme: [default, custom.scss]
     slide-number: true
     transition: fade
-    footer: Biostatistics Shared Resource | Cedars Sinai
+    footer: Biostatistics Shared Resource | Cedars-Sinai
     menu: false
     overview: true
     chalkboard: false
@@ -24,17 +24,16 @@ library(patchwork)
 library(gt)
 library(datasauRus)
 library(gtExtras)
-
 ```
 
 ::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH | Marie Lauzon, MS
-| Biostatistics Shared Resource | Cedars Sinai Medical Center
+| Biostatistics Shared Resource | Cedars-Sinai Medical Center
 | September 9, 2025
 :::
 
 ::: notes
--   Hi Everyone - My name is Michael Luu, and I'm a Research Biostatistician here at the Biostatistics Shared Resources as part of Cedar Sinai Cancer Center. Today I will be talking about descriptive statistics, and the importance of data visualization. The objective of my talk is to provide a motivating example on the need to visualize our data, as well as provide some of the basic tools and types of simple figures you can use to accomplish this goal.
+-   Hi Everyone - My name is Michael Luu, and I'm a Research Biostatistician here at the Biostatistics Shared Resources as part of Cedars-Sinai Cancer Center. Today I will be talking about descriptive statistics, and the importance of data visualization. The objective of my talk is to provide a motivating example on the need to visualize our data, as well as provide some of the basic tools and types of simple figures you can use to accomplish this goal.
 
 :::
 
@@ -69,13 +68,11 @@ plot_data <- data |>
       labels = LETTERS[1:4]
     )
   )
-
 ```
 
 ::: panel-tabset
 ```{r}
 #| results: asis
-
 plot_data <- plot_data %>%
   group_nest(dataset) %>%
   deframe()
@@ -120,13 +117,12 @@ imap_chr(plot_data, \(x, title) {
 # Let's begin by taking descriptive measures
 
 ::: notes
--   So, let's begin by taking some descriptive summary measures of the four datasets as discussed by my colleauge Marie
+-   So, let's begin by taking some descriptive summary measures of the four datasets as discussed by my colleague Marie
 :::
 
 ##  {.center}
 
 ```{r}
-
 plot_data |>
   enframe() |>
   mutate(
@@ -144,8 +140,6 @@ plot_data |>
   rename('dataset' = name) |>
   gt() |>
   tab_options(table.font.size = px(40))
-
-
 ```
 
 <br>
@@ -166,7 +160,7 @@ It appears the counts (n), mean (x), mean (y), and sd (x) and sd (y) are identic
 -   The summary measures are identical for all four datasets!
 :::
 
-# Can we conclude the datasets are similiar or identical?
+# Can we conclude the datasets are similar or identical?
 
 ::: notes
 -   So what can we conclude about the four datasets ?
@@ -179,7 +173,6 @@ It appears the counts (n), mean (x), mean (y), and sd (x) and sd (y) are identic
 ## 
 
 ```{r}
-
 plots <- map(
   plot_data,
   ~ {
@@ -191,7 +184,6 @@ plots <- map(
     plot
   }
 )
-
 ```
 
 ::: panel-tabset
@@ -258,7 +250,7 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 :::
 
 ::: notes
--   This phenomenom expands to more than just the 4 example datasets that I showed, but we have 13 datasets as seen on this slide that have near identical summary measures when visualized.
+-   This phenomenon expands to more than just the 4 example datasets that I showed, but we have 13 datasets as seen on this slide that have near identical summary measures when visualized.
 
 -   So what is the take away from this rather unique and exaggerated example
 :::
@@ -272,7 +264,7 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 ::: incremental
 -   The original "Datasaurus" or "dino" was created by [Alberto Cairo]{.bold-highlight} in the following [blog post](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)^[<http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html>]
 
--   He was then later popularized by the paper published by [Justin Matejka]{.bold-highlight} and [George Fitzmaurize]{.bold-highlight}, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs)^[<https://www.autodesk.com/research/publications/same-stats-different-graphs>], where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
+-   He was then later popularized by the paper published by [Justin Matejka]{.bold-highlight} and [George Fitzmaurice]{.bold-highlight}, titled ['Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing'](https://www.autodesk.com/research/publications/same-stats-different-graphs)^[<https://www.autodesk.com/research/publications/same-stats-different-graphs>], where they simulated 12 additional datasets in addition to the original "Datasaurus" with nearly identical simple statistics
 :::
 
 ::: notes
@@ -291,7 +283,6 @@ ggplot(data, aes(x = x, y = y)) +
   geom_point() +
   facet_wrap(~dataset, ncol = 5) +
   theme_minimal()
-
 ```
 
 
@@ -316,158 +307,36 @@ ggplot(data, aes(x = x, y = y)) +
 ## Anscombe Quartet
 
 ```{r}
+#| include: false
+anscombe_data <- datasets::anscombe |>
+  tidyr::pivot_longer(
+    cols = dplyr::everything(),
+    names_to = c(".value", "dataset"),
+    names_pattern = "(.)(.)"
+  ) |>
+  dplyr::mutate(
+    dataset = factor(
+      dataset,
+      levels = c("1", "2", "3", "4"),
+      labels = c("I", "II", "III", "IV")
+    )
+  ) |>
+  dplyr::select(dataset, x, y)
+```
 
-local({
-  data <- tibble::tribble(
-    ~dataset,
-    ~x,
-    ~y,
-    "I",
-    10L,
-    8.04,
-    "I",
-    8L,
-    6.95,
-    "I",
-    13L,
-    7.58,
-    "I",
-    9L,
-    8.81,
-    "I",
-    11L,
-    8.33,
-    "I",
-    14L,
-    9.96,
-    "I",
-    6L,
-    7.24,
-    "I",
-    4L,
-    4.26,
-    "I",
-    12L,
-    10.84,
-    "I",
-    7L,
-    4.82,
-    "I",
-    5L,
-    5.68,
-    "II",
-    10L,
-    9.14,
-    "II",
-    8L,
-    8.14,
-    "II",
-    13L,
-    8.74,
-    "II",
-    9L,
-    8.77,
-    "II",
-    11L,
-    9.26,
-    "II",
-    14L,
-    8.1,
-    "II",
-    6L,
-    6.13,
-    "II",
-    4L,
-    3.1,
-    "II",
-    12L,
-    9.13,
-    "II",
-    7L,
-    7.26,
-    "II",
-    5L,
-    4.74,
-    "III",
-    10L,
-    7.46,
-    "III",
-    8L,
-    6.77,
-    "III",
-    13L,
-    12.74,
-    "III",
-    9L,
-    7.11,
-    "III",
-    11L,
-    7.81,
-    "III",
-    14L,
-    8.84,
-    "III",
-    6L,
-    6.08,
-    "III",
-    4L,
-    5.39,
-    "III",
-    12L,
-    8.15,
-    "III",
-    7L,
-    6.42,
-    "III",
-    5L,
-    5.73,
-    "IV",
-    8L,
-    6.58,
-    "IV",
-    8L,
-    5.76,
-    "IV",
-    8L,
-    7.71,
-    "IV",
-    8L,
-    8.84,
-    "IV",
-    8L,
-    8.47,
-    "IV",
-    8L,
-    7.04,
-    "IV",
-    8L,
-    5.25,
-    "IV",
-    19L,
-    12.5,
-    "IV",
-    8L,
-    5.56,
-    "IV",
-    8L,
-    7.91,
-    "IV",
-    8L,
-    6.89
-  )
-
-  data |>
-    group_by(dataset) |>
-    summarise(
-      n = n(),
-      mean_x = mean(x),
-      sd_x = sd(x),
-      meay_y = mean(y),
-      sd_y = sd(y)
-    ) |>
-    mutate(across(where(is.numeric), ~ scales::number(.x, .01))) |>
-    knitr::kable()
-})
+```{r}
+anscombe_data |>
+  group_by(dataset) |>
+  summarise(
+    n = n(),
+    mean_x = mean(x),
+    sd_x = sd(x),
+    mean_y = mean(y),
+    sd_y = sd(y)
+  ) |>
+  mutate(across(where(is.numeric), ~ scales::number(.x, .01))) |>
+  gt() |>
+  tab_options(table.font.size = px(40))
 ```
 
 ```{r}
@@ -475,151 +344,10 @@ local({
 #| out-width: 100%
 #| fig.height: 3
 #| fig.width: 12
-
-local({
-  data <- tibble::tribble(
-    ~dataset,
-    ~x,
-    ~y,
-    "I",
-    10L,
-    8.04,
-    "I",
-    8L,
-    6.95,
-    "I",
-    13L,
-    7.58,
-    "I",
-    9L,
-    8.81,
-    "I",
-    11L,
-    8.33,
-    "I",
-    14L,
-    9.96,
-    "I",
-    6L,
-    7.24,
-    "I",
-    4L,
-    4.26,
-    "I",
-    12L,
-    10.84,
-    "I",
-    7L,
-    4.82,
-    "I",
-    5L,
-    5.68,
-    "II",
-    10L,
-    9.14,
-    "II",
-    8L,
-    8.14,
-    "II",
-    13L,
-    8.74,
-    "II",
-    9L,
-    8.77,
-    "II",
-    11L,
-    9.26,
-    "II",
-    14L,
-    8.1,
-    "II",
-    6L,
-    6.13,
-    "II",
-    4L,
-    3.1,
-    "II",
-    12L,
-    9.13,
-    "II",
-    7L,
-    7.26,
-    "II",
-    5L,
-    4.74,
-    "III",
-    10L,
-    7.46,
-    "III",
-    8L,
-    6.77,
-    "III",
-    13L,
-    12.74,
-    "III",
-    9L,
-    7.11,
-    "III",
-    11L,
-    7.81,
-    "III",
-    14L,
-    8.84,
-    "III",
-    6L,
-    6.08,
-    "III",
-    4L,
-    5.39,
-    "III",
-    12L,
-    8.15,
-    "III",
-    7L,
-    6.42,
-    "III",
-    5L,
-    5.73,
-    "IV",
-    8L,
-    6.58,
-    "IV",
-    8L,
-    5.76,
-    "IV",
-    8L,
-    7.71,
-    "IV",
-    8L,
-    8.84,
-    "IV",
-    8L,
-    8.47,
-    "IV",
-    8L,
-    7.04,
-    "IV",
-    8L,
-    5.25,
-    "IV",
-    19L,
-    12.5,
-    "IV",
-    8L,
-    5.56,
-    "IV",
-    8L,
-    7.91,
-    "IV",
-    8L,
-    6.89
-  )
-
-  ggplot(data, aes(x = x, y = y)) +
-    geom_point() +
-    facet_wrap(~dataset, ncol = 4) +
-    theme_minimal(base_size = 15)
-})
+ggplot(anscombe_data, aes(x = x, y = y)) +
+  geom_point() +
+  facet_wrap(~dataset, ncol = 4) +
+  theme_minimal(base_size = 15)
 ```
 
 # Types of Graphical Visualizations
@@ -635,7 +363,7 @@ local({
 ::: incremental
 * Useful for small to moderate sized data
 
-* Allows us to visualize the spread and distribution of one continuous discrete variables
+* Allows us to visualize the spread and distribution of a single continuous or discrete variable
   * e.g. length of stay
 
 * The X axis is the variable of interest and each dot represents a single observation
@@ -653,7 +381,6 @@ local({
 #| out-width: 60%
 #| fig.height: 4
 #| fig.width: 10
-
 local({
   set.seed(5)
   data <- tibble(x = rnorm(50, 25, sd = 5) %>% round())
@@ -671,7 +398,6 @@ local({
     scale_y_continuous(breaks = NULL) +
     labs(y = NULL)
 })
-
 ```
 
 ::: notes
@@ -710,7 +436,6 @@ local({
 #| out-width: 100%
 #| fig.height: 8
 #| fig.width: 6
-
 local({
   set.seed(1)
   data <- tibble(x = rnorm(1000, 25, sd = 2))
@@ -718,7 +443,7 @@ local({
   plot_a <- ggplot(data, aes(x = x)) +
     geom_histogram(color = 'white', binwidth = 1) +
     labs(y = 'Frequency') +
-    geom_density(aes(y = 1 * ..count..)) +
+    geom_density(aes(y = after_stat(count))) +
     theme_minimal(base_size = 15)
 
   plot_b <- ggplot(data, aes(x = x)) +
@@ -729,7 +454,6 @@ local({
 
   plot_a / plot_b
 })
-
 ```
 
 :::
@@ -755,24 +479,22 @@ local({
   ggplot(data, aes(x = x)) +
     geom_histogram(color = 'white', binwidth = 1) +
     labs(y = 'Frequency') +
-    geom_vline(aes(xintercept = mean(x)), color = 'red', size = 1) +
+    geom_vline(aes(xintercept = mean(x)), color = 'red', linewidth = 1) +
     geom_vline(
       aes(xintercept = median(x)),
       color = 'green',
-      size = 1,
+      linewidth = 1,
       linetype = 'dashed'
     ) +
     geom_vline(
       aes(xintercept = 25),
       color = 'blue',
-      size = 1,
+      linewidth = 1,
       linetype = 'dotted'
     ) +
-    geom_density(aes(y = 1 * ..count..)) +
+    geom_density(aes(y = after_stat(count))) +
     theme_light(base_size = 15)
 })
-
-
 ```
 
 ::: notes
@@ -850,7 +572,6 @@ knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 #| out-width: 60%
 #| fig-height: 4
 #| fig-width: 6
-
 local({
   set.seed(1)
   data <- tibble(x = rnorm(25, 25, sd = 5), y = rnorm(25, 45, sd = 2))
@@ -859,7 +580,6 @@ local({
     geom_point() +
     theme_minimal(base_size = 15)
 })
-
 ```
 
 
@@ -893,7 +613,7 @@ local({
 #| fig-width: 5
 #| out-width: 80%
 #| fig-align: center
-
+#| include: false
 library(waffle)
 
 cancer_counts <- c(
@@ -909,9 +629,8 @@ waffle::waffle(
   rows = 10,
   colors = c("#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#B07AA1"),
   xlab = "1 square = 1 patient"
-) + 
+) +
   theme(legend.position = "bottom")
-
 ```
 
 :::
@@ -941,10 +660,9 @@ waffle::waffle(
 
 ```{r}
 #| fig-align: center
-#| out-width: 60%
+#| out-width: 100%
 #| fig-height: 5
-#| fig-width: 4
-
+#| fig-width: 8
 local({
   set.seed(1)
   data <- tibble(
@@ -997,10 +715,8 @@ local({
     coord_cartesian(ylim = c(0, 1)) +
     scale_y_continuous(labels = scales::percent)
 
-  plota
-  plotb
+  plota | plotb
 })
-
 ```
 
 :::
@@ -1010,18 +726,16 @@ local({
 
 # However...
 
-# Bar plots are commonly misued!
+# Bar plots are commonly misused!
 
 ## How [NOT]{.teal} to Bar Plot {.smaller}
 
 ```{r}
 #| fig-align: center
 #| out-width: 70%
-
 knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 ## 14 mins here
-
 ```
 
 ::: aside
@@ -1032,7 +746,7 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 * The following three figures are examples of how NOT to use a bar plots
 
-* Showing sample mean and SD or stand error are NOT recommended!
+* Showing sample mean and SD or standard error are NOT recommended!
 
 * Depending on what you define as the baseline, they can drastically alter the appearance of the height of the bars as seen in the first and second figure. The first figure on the left is using 0 as a reference, where the middle figure is using 0.5 as the reference.
 
@@ -1040,7 +754,7 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 :::
 
-## How [NOT]{.teal} to Bar Plot {.smaller}
+## How [NOT]{.teal} to Bar Plot: Dynamite Plots {.smaller}
 
 
 :::: {.columns}
@@ -1067,7 +781,6 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 #| out-width: 60%
 #| fig-height: 5
 #| fig-width: 4
-
 local({
   set.seed(1)
   a <- tibble(group = 'A', x = rnorm(n = 100, mean = 50, sd = 10))
@@ -1088,7 +801,7 @@ local({
     geom_errorbar(
       aes(ymin = mean - sd, ymax = mean + sd),
       width = .1,
-      size = 1
+      linewidth = 1
     ) +
     geom_col() +
     theme_minimal(base_size = 15) +
@@ -1100,7 +813,6 @@ local({
     ggsci::scale_fill_d3() +
     labs(x = NULL)
 })
-
 ```
 :::
 
@@ -1137,7 +849,6 @@ local({
 #| out-width: 100%
 #| fig-height: 3
 #| fig-width: 4
-
 set.seed(1)
 data <- tibble(
   group = sample(c('A', 'B'), 50, replace = T),
@@ -1151,15 +862,12 @@ ggplot(data, aes(x = group, y = y, color = group)) +
   theme(legend.position = 'none', axis.text.x = element_text(face = 'bold')) +
   ggsci::scale_color_d3() +
   labs(x = NULL)
-
 ```
 
 ```{r}
 #| fig-align: center
 #| out-width: 100%
-
 knitr::include_graphics('images/boxplot_explained.png')
-
 ```
 :::
 
@@ -1247,7 +955,6 @@ ggplot(data, aes(x = group, y = y)) +
 #| fig-align: center
 #| out-width: 100%
 knitr::include_graphics('images/how_to_make_violin_plots.PNG')
-
 ```
 
 ::: aside
@@ -1277,7 +984,7 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 ::: incremental
 
 - Visualizes the relationship between two [continuous]{.bold-highlight} variables, with a third [continuous]{.bold-highlight} variable represented by the size of the bubbles.
-- The color of the bubbles can represent a fourth [categorical]{.bold-highlight} or [continuous]{.bold-highlight}variable.
+- The color of the bubbles can represent a fourth [categorical]{.bold-highlight} or [continuous]{.bold-highlight} variable.
 - Useful for identifying patterns, trends, and clusters in multivariate data.
 
 
@@ -1292,7 +999,6 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 #| fig-width: 4
 #| out-width: 80%
 #| fig-align: center
-
 library(gapminder)
 data <- gapminder |> filter(year == "2007") |> dplyr::select(-year)
 
@@ -1302,11 +1008,10 @@ data |>
   mutate(country = factor(country, country)) |>
   ggplot(aes(x = gdpPercap, y = lifeExp, size = pop, color = continent)) +
   geom_point(alpha = 0.5) +
-  scale_size(range = c(.1, 10), name = "Population (M)") +
+  scale_size(range = c(.1, 10), name = "Population") +
   theme_minimal(base_size = 10) +
-  theme(legend.position = "none", panel.grid.minor = element_blank()) +
-  labs(x = 'GDP per capita', y = 'Life Expectancy')
-
+  theme(legend.position = "right", panel.grid.minor = element_blank()) +
+  labs(x = 'GDP per capita', y = 'Life Expectancy', color = 'Continent')
 ```
 
 :::
