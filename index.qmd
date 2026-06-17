@@ -613,7 +613,7 @@ local({
 #| fig-width: 5
 #| out-width: 80%
 #| fig-align: center
-#| include: false
+#| include: true
 library(waffle)
 
 cancer_counts <- c(
