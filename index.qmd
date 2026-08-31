@@ -29,7 +29,7 @@ library(gtExtras)
 ::: {style="text-align: left; font-size: .7em"}
 | Michael Luu, MPH | Marie Lauzon, MS
 | Biostatistics Shared Resource | Cedars-Sinai Medical Center
-| September 9, 2025
+| September 1, 2026
 :::
 
 ::: notes
