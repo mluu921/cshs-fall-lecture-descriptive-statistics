@@ -393,7 +393,7 @@ anscombe_data |>
   ) |>
   mutate(across(where(is.numeric), ~ scales::number(.x, .01))) |>
   gt() |>
-  tab_options(table.font.size = px(40))
+  tab_options(table.font.size = px(30))
 ```
 
 ```{r}
@@ -499,7 +499,7 @@ snow_plots <- local({
 ::: {.fragment .fade-out fragment-index="1"}
 ```{r}
 #| fig-align: center
-#| out-width: "55%"
+#| out-width: "50%"
 #| fig-width: 7
 #| fig-height: 7
 #| echo: false
@@ -510,7 +510,7 @@ snow_plots$pumps_only
 ::: {.fragment .fade-in fragment-index="1"}
 ```{r}
 #| fig-align: center
-#| out-width: "55%"
+#| out-width: "50%"
 #| fig-width: 7
 #| fig-height: 7
 #| echo: false
@@ -550,6 +550,10 @@ snow_plots$full
 
 ## Dot plot {.smaller}
 
+:::: {.columns}
+
+::: {.column width='40%'}
+
 ::: incremental
 * Useful for small to moderate sized data
 
@@ -565,12 +569,15 @@ snow_plots$full
 * Intuitive and easy to understand
 :::
 
+:::
+
+::: {.column width='60%'}
 
 ```{r}
-#| fig.align: center
-#| out-width: 60%
+#| fig-align: center
+#| out-width: 80%
 #| fig-height: 4
-#| fig-width: 10
+#| fig-width: 6
 local({
   set.seed(5)
   data <- tibble(x = rnorm(50, 25, sd = 5) %>% round())
@@ -589,6 +596,10 @@ local({
     labs(y = NULL)
 })
 ```
+
+:::
+
+::::
 
 ::: notes
 
@@ -719,7 +730,7 @@ knitr::include_graphics('images/normal_distribution_figure.png')
 
 ```{r}
 #| fig-align: center
-#| out-width: 75%
+#| out-width: 65%
 knitr::include_graphics('images/univariate_continuous_distributrions.PNG')
 ```
 
@@ -737,7 +748,7 @@ knitr::include_graphics('images/univariate_continuous_distributrions.PNG')
 
 ```{r}
 #| fig-align: center
-#| out-width: 75%
+#| out-width: 65%
 knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 ```
 
@@ -749,6 +760,10 @@ knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 
 ## Scatter plot {.smaller}
 
+:::: {.columns}
+
+::: {.column width='40%'}
+
 ::: incremental
 
 * Used to visualize the relationship between two continuous variables
@@ -757,10 +772,14 @@ knitr::include_graphics('images/univariate_discrete_distributions.PNG')
 
 :::
 
+:::
+
+::: {.column width='60%'}
+
 ```{r}
 #| fig-align: center
-#| out-width: 60%
-#| fig-height: 4
+#| out-width: 100%
+#| fig-height: 4.5
 #| fig-width: 6
 local({
   set.seed(1)
@@ -771,6 +790,10 @@ local({
     theme_minimal(base_size = 15)
 })
 ```
+
+:::
+
+::::
 
 
 ::: notes
@@ -803,7 +826,7 @@ local({
 
 ```{r}
 #| fig-align: center
-#| out-width: 100%
+#| out-width: 90%
 #| fig-height: 10
 #| fig-width: 10
 local({
@@ -839,15 +862,16 @@ local({
   base_plot <- ggplot(data, aes(x = week, y = volume, color = arm)) +
     scale_x_continuous(breaks = weeks) +
     coord_cartesian(ylim = c(30, 160)) +
-    theme_minimal(base_size = 12) +
+    theme_minimal(base_size = 18) +
     theme(
       legend.position = "bottom",
       panel.grid.minor = element_blank(),
-      plot.subtitle = element_text(color = "grey40", size = 9)
+      plot.title = element_text(face = "bold", size = 20),
+      plot.subtitle = element_text(color = "grey40", size = 14)
     )
 
   p_scatter <- base_plot +
-    geom_point(size = 1.6, alpha = 0.6) +
+    geom_point(size = 2.5, alpha = 0.6) +
     scale_color_manual(values = arm_colors, name = NULL) +
     labs(
       title = "Scatter plot",
@@ -857,8 +881,8 @@ local({
     )
 
   p_line <- base_plot +
-    geom_line(aes(group = patient), alpha = 0.7, linewidth = 0.6) +
-    geom_point(size = 1.6, alpha = 0.7) +
+    geom_line(aes(group = patient), alpha = 0.7, linewidth = 0.8) +
+    geom_point(size = 2.5, alpha = 0.7) +
     scale_color_manual(values = arm_colors, name = NULL) +
     labs(
       title = "Line plot",
@@ -868,8 +892,8 @@ local({
     )
 
   p_focus_treatment <- base_plot +
-    geom_line(aes(group = patient), alpha = 0.8, linewidth = 0.6) +
-    geom_point(size = 1.6, alpha = 0.8) +
+    geom_line(aes(group = patient), alpha = 0.8, linewidth = 0.8) +
+    geom_point(size = 2.5, alpha = 0.8) +
     scale_color_manual(
       values = c(Treatment = "#FF7F0E", Control = "grey80"),
       guide = "none"
@@ -882,8 +906,8 @@ local({
     )
 
   p_focus_control <- base_plot +
-    geom_line(aes(group = patient), alpha = 0.8, linewidth = 0.6) +
-    geom_point(size = 1.6, alpha = 0.8) +
+    geom_line(aes(group = patient), alpha = 0.8, linewidth = 0.8) +
+    geom_point(size = 2.5, alpha = 0.8) +
     scale_color_manual(
       values = c(Treatment = "grey80", Control = "#1F77B4"),
       guide = "none"
@@ -945,7 +969,7 @@ local({
 ```{r}
 #| fig-height: 6
 #| fig-width: 5
-#| out-width: 80%
+#| out-width: 55%
 #| fig-align: center
 #| include: true
 library(waffle)
@@ -1259,24 +1283,49 @@ knitr::include_graphics('images/BoxViolinSmaller.gif')
 ::: {.column width='60%'}
 ```{r}
 #| fig-height: 5
-#| fig-width: 4
-#| out-width: 60%
+#| fig-width: 5
+#| out-width: 90%
 #| fig-align: center
-set.seed(1)
-data <- tibble(
-  group = sample(c('A', 'B'), 50, replace = T),
-  y = c(rnorm(25, 30, sd = 2), rnorm(25, 45, sd = 2))
-)
+local({
+  set.seed(1)
+  n_per_group <- 60
 
-ggplot(data, aes(x = group, y = y)) +
-  geom_boxplot(width = .1, aes(color = group)) +
-  geom_violin(aes(fill = group, color = NA), alpha = .2) +
-  theme_minimal(base_size = 15) +
-  theme(legend.position = 'none', axis.text.x = element_text(face = 'bold')) +
-  ggsci::scale_color_d3() +
-  ggsci::scale_fill_d3() +
-  labs(x = NULL) +
-  coord_cartesian(expand = T)
+  data <- bind_rows(
+    tibble(
+      group = "Control",
+      value = rnorm(n_per_group, mean = 50, sd = 8)
+    ),
+    tibble(
+      group = "Treatment",
+      # Bimodal - mixture of responders (~30) and non-responders (~70)
+      value = c(
+        rnorm(n_per_group / 2, mean = 30, sd = 5),
+        rnorm(n_per_group / 2, mean = 70, sd = 5)
+      )
+    )
+  )
+
+  arm_colors <- c(Control = "#1F77B4", Treatment = "#FF7F0E")
+
+  ggplot(data, aes(x = group, y = value)) +
+    geom_violin(aes(fill = group), alpha = 0.3, color = NA, width = 0.75) +
+    geom_boxplot(
+      aes(color = group),
+      width = 0.15,
+      alpha = 0.9,
+      outlier.shape = NA,
+      linewidth = 0.6
+    ) +
+    scale_fill_manual(values = arm_colors) +
+    scale_color_manual(values = arm_colors) +
+    labs(x = NULL, y = "Serum biomarker (ng/mL)") +
+    theme_minimal(base_size = 15) +
+    theme(
+      legend.position = "none",
+      panel.grid.minor = element_blank(),
+      axis.text.x = element_text(face = "bold")
+    )
+})
 ```
 :::
 
@@ -1329,9 +1378,9 @@ knitr::include_graphics('images/how_to_make_violin_plots.PNG')
 ::: {.column width='60%'}
 
 ```{r}
-#| fig-height: 5
-#| fig-width: 4
-#| out-width: 80%
+#| fig-height: 4
+#| fig-width: 5
+#| out-width: 90%
 #| fig-align: center
 library(gapminder)
 data <- gapminder |> filter(year == "2007") |> dplyr::select(-year)
@@ -1381,7 +1430,7 @@ data |>
 ::: {.column width='60%'}
 ```{r}
 #| fig-align: center
-#| out-width: 80%
+#| out-width: 70%
 #| fig-height: 6
 #| fig-width: 5
 set.seed(123)
