@@ -245,7 +245,9 @@ plots <- map(
 
 ```{r}
 #| fig-align: center
-#| out-width: 100%
+#| out-width: "55%"
+#| fig-width: 6
+#| fig-height: 6
 plots$A
 ```
 
@@ -253,7 +255,9 @@ plots$A
 
 ```{r}
 #| fig-align: center
-#| out-width: 100%
+#| out-width: "55%"
+#| fig-width: 6
+#| fig-height: 6
 plots$B
 ```
 
@@ -261,7 +265,9 @@ plots$B
 
 ```{r}
 #| fig-align: center
-#| out-width: 100%
+#| out-width: "55%"
+#| fig-width: 6
+#| fig-height: 6
 plots$C
 ```
 
@@ -269,7 +275,9 @@ plots$C
 
 ```{r}
 #| fig-align: center
-#| out-width: 100%
+#| out-width: "55%"
+#| fig-width: 6
+#| fig-height: 6
 plots$D
 ```
 
@@ -320,8 +328,8 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 ```{r}
 #| fig-align: center
 #| out-width: 80%
-#| fig.height: 8
-#| fig.width: 12
+#| fig-height: 8
+#| fig-width: 12
 data <- datasauRus::datasaurus_dozen
 
 ggplot(data, aes(x = x, y = y)) +
@@ -387,13 +395,146 @@ anscombe_data |>
 ```{r}
 #| fig-align: center
 #| out-width: 100%
-#| fig.height: 3
-#| fig.width: 12
+#| fig-height: 3
+#| fig-width: 12
 ggplot(anscombe_data, aes(x = x, y = y)) +
   geom_point() +
   facet_wrap(~dataset, ncol = 4) +
   theme_minimal(base_size = 15)
 ```
+
+## John Snow's Cholera
+
+```{r}
+#| include: false
+snow_plots <- local({
+  library(HistData)
+
+  data(Snow.deaths)
+  data(Snow.pumps)
+  data(Snow.streets)
+
+  broad_st <- Snow.pumps |> filter(str_detect(label, "Broad"))
+
+  streets_layer <- geom_path(
+    data = Snow.streets,
+    aes(x = x, y = y, group = street),
+    color = "grey70",
+    linewidth = 0.4
+  )
+
+  deaths_layer <- geom_point(
+    data = Snow.deaths,
+    aes(x = x, y = y, color = "Cholera death", shape = "Cholera death"),
+    alpha = 0.65,
+    size = 1.6
+  )
+
+  pumps_layer <- geom_point(
+    data = Snow.pumps,
+    aes(x = x, y = y, color = "Water pump", shape = "Water pump"),
+    size = 3.5
+  )
+
+  label_layer <- annotate(
+    "text",
+    x = broad_st$x,
+    y = broad_st$y,
+    label = "  Broad Street Pump",
+    hjust = 0,
+    vjust = -1,
+    fontface = "bold",
+    color = "#1F4E79",
+    size = 4.5
+  )
+
+  # `limits` keeps both legend entries visible even when deaths aren't drawn,
+  # so the legend doesn't jump between fragments.
+  common <- list(
+    scale_color_manual(
+      name = NULL,
+      values = c("Cholera death" = "#B22222", "Water pump" = "#1F4E79"),
+      limits = c("Cholera death", "Water pump")
+    ),
+    scale_shape_manual(
+      name = NULL,
+      values = c("Cholera death" = 16, "Water pump" = 17),
+      limits = c("Cholera death", "Water pump")
+    ),
+    coord_equal(),
+    labs(
+      title = "John Snow's Cholera Map, 1854",
+      subtitle = "Deaths clustered around the Broad Street pump in London's Soho district",
+    ),
+    theme_void(base_size = 14),
+    theme(
+      plot.title = element_text(face = "bold", hjust = 0.5),
+      plot.subtitle = element_text(
+        hjust = 0.5,
+        color = "grey40",
+        margin = margin(b = 10)
+      ),
+      plot.caption = element_text(color = "grey60", size = 9),
+      legend.position = "bottom"
+    )
+  )
+
+  list(
+    pumps_only = ggplot() + streets_layer + pumps_layer + label_layer + common,
+    full = ggplot() +
+      streets_layer +
+      deaths_layer +
+      pumps_layer +
+      label_layer +
+      common
+  )
+})
+```
+
+::: r-stack
+::: {.fragment .fade-out fragment-index="1"}
+```{r}
+#| fig-align: center
+#| out-width: "55%"
+#| fig-width: 7
+#| fig-height: 7
+#| echo: false
+snow_plots$pumps_only
+```
+:::
+
+::: {.fragment .fade-in fragment-index="1"}
+```{r}
+#| fig-align: center
+#| out-width: "55%"
+#| fig-width: 7
+#| fig-height: 7
+#| echo: false
+snow_plots$full
+```
+:::
+:::
+
+::: notes
+
+-   To close out this "why visualize" section, I want to share the classic historical example - John Snow's cholera map from 1854.
+
+-   In August of 1854, a severe cholera outbreak struck the Soho district of London. Over 500 people died in a matter of days, within a very small geographic area.
+
+-   At the time, the prevailing theory was that cholera was caused by "miasma", or bad air. John Snow suspected instead that it was waterborne - but he had no clean way to prove it from a table of names and addresses.
+
+-   What you're seeing right now is a modern rendering of Snow's map. The grey lines are the streets of Soho. The blue triangles are the public water pumps in the neighborhood - and I've called out the Broad Street pump specifically.
+
+-   Now watch what happens when we overlay every cholera death from the outbreak.
+
+-   The deaths cluster very tightly around the Broad Street pump. Snow used this map to convince the local authorities to remove the handle from that pump, and the outbreak ended shortly afterwards.
+
+-   The takeaway is the same theme we've been building throughout this section - a table of deaths and addresses would never have made this pattern obvious. It took plotting the data on a map to reveal what was really going on.
+
+-   This is often cited as the first modern data visualization in epidemiology, and it fundamentally changed the field of public health.
+
+:::
+
 
 # Types of Graphical Visualizations
 
@@ -424,8 +565,8 @@ ggplot(anscombe_data, aes(x = x, y = y)) +
 ```{r}
 #| fig.align: center
 #| out-width: 60%
-#| fig.height: 4
-#| fig.width: 10
+#| fig-height: 4
+#| fig-width: 10
 local({
   set.seed(5)
   data <- tibble(x = rnorm(50, 25, sd = 5) %>% round())
@@ -479,8 +620,8 @@ local({
 ```{r}
 #| fig.align: center
 #| out-width: 100%
-#| fig.height: 8
-#| fig.width: 6
+#| fig-height: 8
+#| fig-width: 6
 local({
   set.seed(1)
   data <- tibble(x = rnorm(1000, 25, sd = 2))
@@ -1093,8 +1234,8 @@ data |>
 ```{r}
 #| fig-align: center
 #| out-width: 80%
-#| fig.height: 6
-#| fig.width: 5
+#| fig-height: 6
+#| fig-width: 5
 set.seed(123)
 years <- 2015:2022
 regions <- c("North", "South", "East", "West", "Central")
