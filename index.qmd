@@ -403,7 +403,7 @@ ggplot(anscombe_data, aes(x = x, y = y)) +
   theme_minimal(base_size = 15)
 ```
 
-## John Snow's Cholera
+## A Historical Case for Visualization
 
 ```{r}
 #| include: false
@@ -772,6 +772,150 @@ local({
 ::: notes
 
 * Next I wanted to reintroduce the scatter plot
+
+:::
+
+## Line plot {.smaller}
+
+:::: {.columns}
+
+::: {.column width='40%'}
+
+::: incremental
+
+* Used to visualize a [continuous]{.bold-highlight} variable over an ordered sequence - typically time
+
+* Points are connected in order, revealing trends and patterns of change that a scatter plot alone would obscure
+
+* Common in clinical research for tracking biomarkers, tumor burden, or patient-reported outcomes over follow-up
+
+* Multiple lines allow direct comparison between groups (e.g. treatment arms)
+
+:::
+
+:::
+
+::: {.column width='60%'}
+
+```{r}
+#| fig-align: center
+#| out-width: 100%
+#| fig-height: 8
+#| fig-width: 10
+local({
+  set.seed(1)
+  n_per_arm <- 10
+  weeks <- seq(0, 12, by = 2)
+
+  # Per-patient baselines and slopes with meaningful variability
+  patient_effects <- bind_rows(
+    tibble(
+      patient = 1:n_per_arm,
+      arm = "Treatment",
+      baseline = rnorm(n_per_arm, 100, 10),
+      slope = rnorm(n_per_arm, -4, 1.2)
+    ),
+    tibble(
+      patient = (n_per_arm + 1):(2 * n_per_arm),
+      arm = "Control",
+      baseline = rnorm(n_per_arm, 100, 10),
+      slope = rnorm(n_per_arm, 3.5, 1.2)
+    )
+  )
+
+  data <- expand_grid(
+    patient = patient_effects$patient,
+    week = weeks
+  ) |>
+    left_join(patient_effects, by = "patient") |>
+    mutate(volume = baseline + slope * (week / 2) + rnorm(n(), 0, 7))
+
+  arm_colors <- c(Treatment = "#FF7F0E", Control = "#1F77B4")
+
+  base_plot <- ggplot(data, aes(x = week, y = volume, color = arm)) +
+    scale_x_continuous(breaks = weeks) +
+    coord_cartesian(ylim = c(30, 160)) +
+    theme_minimal(base_size = 12) +
+    theme(
+      legend.position = "bottom",
+      panel.grid.minor = element_blank(),
+      plot.subtitle = element_text(color = "grey40", size = 9)
+    )
+
+  p_scatter <- base_plot +
+    geom_point(size = 1.6, alpha = 0.6) +
+    scale_color_manual(values = arm_colors, name = NULL) +
+    labs(
+      title = "Scatter plot",
+      subtitle = "Points overlap - trend is unclear",
+      x = "Week",
+      y = "Tumor volume (mm³)"
+    )
+
+  p_line <- base_plot +
+    geom_line(aes(group = patient), alpha = 0.7, linewidth = 0.6) +
+    geom_point(size = 1.6, alpha = 0.7) +
+    scale_color_manual(values = arm_colors, name = NULL) +
+    labs(
+      title = "Line plot",
+      subtitle = "Connecting within-patient reveals the trajectories",
+      x = "Week",
+      y = NULL
+    )
+
+  p_focus_treatment <- base_plot +
+    geom_line(aes(group = patient), alpha = 0.8, linewidth = 0.6) +
+    geom_point(size = 1.6, alpha = 0.8) +
+    scale_color_manual(
+      values = c(Treatment = "#FF7F0E", Control = "grey80"),
+      guide = "none"
+    ) +
+    labs(
+      title = "Focus: Treatment",
+      subtitle = "Every treated patient trends downward",
+      x = "Week",
+      y = "Tumor volume (mm³)"
+    )
+
+  p_focus_control <- base_plot +
+    geom_line(aes(group = patient), alpha = 0.8, linewidth = 0.6) +
+    geom_point(size = 1.6, alpha = 0.8) +
+    scale_color_manual(
+      values = c(Treatment = "grey80", Control = "#1F77B4"),
+      guide = "none"
+    ) +
+    labs(
+      title = "Focus: Control",
+      subtitle = "Every control patient trends upward",
+      x = "Week",
+      y = NULL
+    )
+
+  ((p_scatter | p_line) / (p_focus_treatment | p_focus_control)) +
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom")
+})
+```
+
+:::
+
+::::
+
+::: notes
+
+* On the previous slide we introduced the scatter plot for two continuous variables. But when one of those variables is ordered - typically time - and we have repeated measurements per subject, a plain scatter plot can quickly become a cloud of points.
+
+* Top left - I've plotted tumor volume across 12 weeks of follow-up for a small cohort of patients as a scatter plot. Every point is a single measurement on a single patient at a single visit. The two arms overlap heavily, and it's genuinely hard to see any trend.
+
+* Top right - exact same points, but I've connected each patient's measurements over time. The trajectories emerge, and the direction of each arm becomes visible.
+
+* Bottom left - I've greyed out the control arm to focus attention on just the treatment trajectories. Every treated patient trends downward - though with variability, which is a realistic picture of clinical data.
+
+* Bottom right - now the reverse. I've greyed out the treatment arm to focus on just the control trajectories. Every control patient trends upward.
+
+* The lesson here is two-fold. First, ordering carries information that a scatter plot alone doesn't reveal. Second, subtle use of color - highlighting one group and greying the other - is a powerful way to guide the audience's attention to the specific comparison you want them to see.
+
+* This is why line plots are the default choice for repeated measures over time - biomarkers, tumor burden, patient-reported outcomes across follow-up visits, and so on.
 
 :::
 
@@ -1313,6 +1457,11 @@ ggplot(tile_data, aes(x = Year, y = Region, fill = IncidenceRate)) +
   - Dot plot
   - Box plot
   - Violin plot
+:::
+
+::: {.fragment}
+* [Continuous variable over time]{.bold-highlight}
+  - Line plot
 :::
 
 ::: {.fragment}
