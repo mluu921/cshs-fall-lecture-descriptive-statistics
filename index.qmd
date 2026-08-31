@@ -47,7 +47,61 @@ Also available as a PDF on Onedrive
 
 ::: notes
 
--   So to start off my talk, I want to provide a motivating example and pose this question
+-   Before we jump into the motivating example, I want to briefly frame what we're doing and what I'm hoping you'll take away from my portion of the talk.
+
+:::
+
+## Learning Objectives {.smaller}
+
+::: incremental
+-   Explain why simple summary statistics alone can be misleading
+
+-   Match a data type (continuous, categorical, or bivariate) to an appropriate figure
+
+-   Recognize common pitfalls in the literature (e.g. dynamite plots, truncated axes, bar plots of means)
+
+-   Understand when a box plot is not enough
+:::
+
+::: notes
+
+-   By the end of my portion of the talk, I'm hoping you'll walk away with these four things.
+
+-   First, an appreciation of why simple summary statistics alone - like a mean and standard deviation - can sometimes hide important features of your data.
+
+-   Second, a rough decision guide for picking a figure based on the type of variable you're working with.
+
+-   Third, an eye for a few common pitfalls that show up frequently in the published literature.
+
+-   And finally, an understanding of when the tools we commonly reach for - like the box plot - are not quite enough on their own.
+
+:::
+
+## Why describe data? {.smaller}
+
+::: incremental
+-   [Summarize]{.bold-highlight} - reduce many observations into a few numbers or pictures a person can actually hold in their head
+
+-   [Detect anomalies]{.bold-highlight} - outliers, data entry errors, and missingness patterns
+
+-   [Check assumptions]{.bold-highlight} - most inferential methods (e.g. t-tests, linear regression) assume something about the shape of the data
+
+-   [Communicate]{.bold-highlight} - Table 1 of nearly every clinical paper is descriptive statistics
+:::
+
+::: notes
+
+-   Before we get into the how, a quick reminder of the why. There are really four reasons we describe data.
+
+-   The first is to summarize. A dataset with thousands of rows is not something a human can meaningfully hold in their head - we need to reduce it down to a handful of numbers or a picture.
+
+-   The second is to detect anomalies. Simple summaries and figures are often the fastest way to catch outliers, data entry errors, or unexpected missingness before they cause problems downstream.
+
+-   The third is to check assumptions. Almost every inferential method - t-tests, linear regression, ANOVA - assumes something about the shape or distribution of the data. Describing your data is how you verify those assumptions hold.
+
+-   And the fourth is simply to communicate. Table 1 of nearly every clinical paper is a descriptive summary of the study cohort.
+
+-   Marie just covered the quantitative side of describing data. I'll be covering the visual side. Both serve these same four goals - and as we'll see next, they work best together.
 
 :::
 
