@@ -230,18 +230,6 @@ plots$D
 ```{r}
 #| fig-align: center
 #| out-width: 100%
-knitr::include_graphics('images/blow-mind-mind-blown.gif')
-```
-
-::: notes
--   You might be thinking, what is going on!? I just showed you four different datasets with identical or near identical summary measures, yet we have these unique and interesting figures...
-:::
-
-## 
-
-```{r}
-#| fig-align: center
-#| out-width: 100%
 knitr::include_graphics('images/DinoSequentialSmaller.gif')
 ```
 
@@ -250,6 +238,9 @@ knitr::include_graphics('images/DinoSequentialSmaller.gif')
 :::
 
 ::: notes
+
+-   You might be thinking, what is going on!? I just showed you four different datasets with identical or near identical summary measures, yet we have these unique and interesting figures...
+
 -   This phenomenon expands to more than just the 4 example datasets that I showed, but we have 13 datasets as seen on this slide that have near identical summary measures when visualized.
 
 -   So what is the take away from this rather unique and exaggerated example
