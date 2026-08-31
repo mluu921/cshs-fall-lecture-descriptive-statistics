@@ -1,5 +1,5 @@
 ---
-format: 
+format:
   revealjs:
     theme: [default, custom.scss]
     slide-number: true
@@ -9,7 +9,11 @@ format:
     overview: true
     chalkboard: false
     lightbox: true
-editor_options: 
+fig-dpi: 300
+knitr:
+  opts_chunk:
+    dev: "ragg_png"
+editor_options:
   chunk_output_type: console
 cache: true
 ---
