@@ -1015,11 +1015,13 @@ knitr::include_graphics('images/how_not_to_barplot.PNG')
 
 * The following three figures are examples of how NOT to use a bar plots
 
-* Showing sample mean and SD or standard error are NOT recommended!
+* Showing sample mean and SD or standard error are NOT recommended as bar plots with error bars!
 
 * Depending on what you define as the baseline, they can drastically alter the appearance of the height of the bars as seen in the first and second figure. The first figure on the left is using 0 as a reference, where the middle figure is using 0.5 as the reference.
 
 * Creating breaks in the Y axis as seen on the third figure will also distort our data.
+
+* The bar often also hides the sample size. A bar showing the mean value for n=3 may look identical to a bar showing the mean value for n=300. The audience can't gauge this from the bar alone and can be misleading.
 
 :::
 
