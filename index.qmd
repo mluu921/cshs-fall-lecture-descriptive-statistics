@@ -746,19 +746,18 @@ local({
   n_per_arm <- 10
   weeks <- seq(0, 12, by = 2)
 
-  # Per-patient baselines and slopes with meaningful variability
   patient_effects <- bind_rows(
     tibble(
       patient = 1:n_per_arm,
       arm = "Treatment",
-      baseline = rnorm(n_per_arm, 100, 10),
-      slope = rnorm(n_per_arm, -4, 1.2)
+      baseline = rnorm(n_per_arm, 100, 12),
+      slope = rnorm(n_per_arm, -5, 0.5)
     ),
     tibble(
       patient = (n_per_arm + 1):(2 * n_per_arm),
       arm = "Control",
-      baseline = rnorm(n_per_arm, 100, 10),
-      slope = rnorm(n_per_arm, 3.5, 1.2)
+      baseline = rnorm(n_per_arm, 100, 12),
+      slope = rnorm(n_per_arm, 5, 0.5)
     )
   )
 
@@ -767,7 +766,7 @@ local({
     week = weeks
   ) |>
     left_join(patient_effects, by = "patient") |>
-    mutate(volume = baseline + slope * (week / 2) + rnorm(n(), 0, 7))
+    mutate(volume = baseline + slope * (week / 2) + rnorm(n(), 0, 2))
 
   arm_colors <- c(Treatment = "#FF7F0E", Control = "#1F77B4")
 
