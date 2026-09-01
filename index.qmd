@@ -1275,25 +1275,6 @@ local({
 
 ::::
 
-
-## How are violin plots made?
-
-```{r}
-#| fig-align: center
-#| out-width: 100%
-knitr::include_graphics('images/how_to_make_violin_plots.PNG')
-```
-
-::: aside
-* Hintze, J. L., & Nelson, R. D. (1998). Violin plots: a box plot-density trace synergism. The American Statistician, 52(2), 181-184.
-:::
-
-::: notes
-
-* Violin plots are an amalgamation of a box plot and a histogram
-
-:::
-
 # Beyond two variables
 
 ::: notes
