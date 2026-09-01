@@ -55,32 +55,6 @@ Also available as a PDF on Onedrive
 
 :::
 
-## Learning Objectives {.smaller}
-
-::: incremental
--   Explain why simple summary statistics alone can be misleading
-
--   Match a data type (continuous, categorical, or bivariate) to an appropriate figure
-
--   Recognize common pitfalls in the literature (e.g. dynamite plots, truncated axes, bar plots of means)
-
--   Understand when a box plot is not enough
-:::
-
-::: notes
-
--   By the end of my portion of the talk, I'm hoping you'll walk away with these four things.
-
--   First, an appreciation of why simple summary statistics alone - like a mean and standard deviation - can sometimes hide important features of your data.
-
--   Second, a rough decision guide for picking a figure based on the type of variable you're working with.
-
--   Third, an eye for a few common pitfalls that show up frequently in the published literature.
-
--   And finally, an understanding of when the tools we commonly reach for - like the box plot - are not quite enough on their own.
-
-:::
-
 ## Why describe data? {.smaller}
 
 ::: incremental
