@@ -158,20 +158,19 @@ plot_data |>
 
 ```{r}
 plot_data |>
-  enframe() |>
+  group_nest(dataset) |>
   mutate(
-    n = map_int(value, ~ nrow(.x)),
-    mean_x = map_dbl(value, ~ mean(.x$x)),
-    sd_x = map_dbl(value, ~ sd(.x$x)),
-    mean_y = map_dbl(value, ~ mean(.x$y)),
-    sd_y = map_dbl(value, ~ sd(.x$y))
-  ) %>%
+    n = map_int(data, ~ nrow(.x)),
+    mean_x = map_dbl(data, ~ mean(.x$x)),
+    sd_x = map_dbl(data, ~ sd(.x$x)),
+    mean_y = map_dbl(data, ~ mean(.x$y)),
+    sd_y = map_dbl(data, ~ sd(.x$y))
+  ) |>
   mutate(across(
     c(mean_x, sd_x, mean_y, sd_y),
     ~ scales::label_number(.1)(.x)
   )) |>
-  select(-value) |>
-  rename('dataset' = name) |>
+  select(-data) |>
   gt() |>
   tab_options(table.font.size = px(40))
 ```
