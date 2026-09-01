@@ -49,12 +49,6 @@ https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics
 
 Also available as a PDF on Onedrive
 
-::: notes
-
--   Before we jump into the motivating example, I want to briefly frame what we're doing and what I'm hoping you'll take away from my portion of the talk.
-
-:::
-
 ## Why describe data? {.smaller}
 
 ::: incremental
@@ -849,7 +843,9 @@ local({
 
 ::: notes
 
-* On the previous slide we introduced the scatter plot for two continuous variables. But when one of those variables is ordered - typically time - and we have repeated measurements per subject, a plain scatter plot can quickly become a cloud of points.
+* This is a natural extension of the scatter plot.
+
+* This is all simulated data
 
 * Top left - I've plotted tumor volume across 12 weeks of follow-up for a small cohort of patients as a scatter plot. Every point is a single measurement on a single patient at a single visit. The two arms overlap heavily, and it's genuinely hard to see any trend.
 
@@ -860,8 +856,6 @@ local({
 * Bottom right - now the reverse. I've greyed out the treatment arm to focus on just the control trajectories. Every control patient trends upward.
 
 * The lesson here is two-fold. First, ordering carries information that a scatter plot alone doesn't reveal. Second, subtle use of color - highlighting one group and greying the other - is a powerful way to guide the audience's attention to the specific comparison you want them to see.
-
-* This is why line plots are the default choice for repeated measures over time - biomarkers, tumor burden, patient-reported outcomes across follow-up visits, and so on.
 
 :::
 
